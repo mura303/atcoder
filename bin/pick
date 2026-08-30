@@ -74,16 +74,24 @@ def recent_log():
     return 0
 
 
+def handle_from_file():
+    """リポジトリ直下の .atcoder-user に書かれたハンドルを読む。"""
+    path = os.path.join(ROOT, ".atcoder-user")
+    if os.path.exists(path):
+        return open(path, encoding="utf-8").read().strip() or None
+    return None
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--user", default=os.environ.get("ATCODER_USER"))
+    ap.add_argument("--user", default=os.environ.get("ATCODER_USER") or handle_from_file())
     ap.add_argument("--min", type=int, default=400)
     ap.add_argument("--max", type=int, default=1000)
     ap.add_argument("--n", type=int, default=1)
     ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args()
     if not a.user:
-        sys.exit("ハンドルが不明。--user か環境変数 ATCODER_USER を指定する。")
+        sys.exit("ハンドルが不明。.atcoder-user に書くか --user で指定する。")
 
     shift = recent_log()
     lo, hi = a.min + shift, a.max + shift
