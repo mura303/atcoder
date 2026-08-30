@@ -1,0 +1,154 @@
+#!/usr/bin/env python3
+"""今日の 1 問を選ぶ。
+
+    bin/pick                    # ATCODER_USER を使って 1 問選び、today.md を更新
+    bin/pick --user foo         # ハンドルを指定
+    bin/pick --min 600 --max 1200
+    bin/pick --n 3              # 3 問出す
+    bin/pick --dry-run          # today.md を書かずに表示だけ
+
+AtCoder Problems (kenkoooo.com) の公開データを使う。
+AC 済みの問題は除外し、Difficulty 帯から未 AC の問題をその日の日付で決まる乱数で選ぶ
+(同じ日に何度実行しても同じ問題が出る)。
+"""
+import argparse
+import datetime
+import gzip
+import io
+import json
+import os
+import random
+import re
+import sys
+import urllib.request
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+UA = "Mozilla/5.0 (compatible; atcoder-practice/1.0)"
+BASE = "https://kenkoooo.com/atcoder"
+
+
+def get_json(url):
+    req = urllib.request.Request(
+        url, headers={"User-Agent": UA, "Accept-Encoding": "gzip"}
+    )
+    with urllib.request.urlopen(req, timeout=60) as r:
+        raw = r.read()
+        if r.headers.get("Content-Encoding") == "gzip":
+            raw = gzip.GzipFile(fileobj=io.BytesIO(raw)).read()
+    return json.loads(raw.decode("utf-8"))
+
+
+def solved_problems(user):
+    """AC 済みの problem_id の集合。API は 1 回 500 件までなので送信時刻で送る。"""
+    solved, cursor, guard = set(), 0, 0
+    while guard < 200:
+        guard += 1
+        batch = get_json(f"{BASE}/atcoder-api/v3/user/submissions?user={user}&from_second={cursor}")
+        if not batch:
+            break
+        for s in batch:
+            if s.get("result") == "AC":
+                solved.add(s["problem_id"])
+        latest = max(s["epoch_second"] for s in batch)
+        if latest < cursor + 1 or len(batch) < 100:
+            break
+        cursor = latest + 1
+    return solved
+
+
+def recent_log():
+    """log.md の直近 10 行から、帯を上げるか下げるかを決める。"""
+    path = os.path.join(ROOT, "log.md")
+    if not os.path.exists(path):
+        return 0
+    rows = [l for l in open(path, encoding="utf-8").read().split("\n") if re.match(r"^\d{4}-\d{2}-\d{2}", l)]
+    rows = rows[-10:]
+    if len(rows) < 5:
+        return 0
+    self_ac = sum("自力AC" in r for r in rows)
+    unsolved = sum("未AC" in r for r in rows)
+    if self_ac >= 8:
+        return +200      # 楽すぎる
+    if unsolved >= 4:
+        return -200      # 難しすぎる
+    return 0
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--user", default=os.environ.get("ATCODER_USER"))
+    ap.add_argument("--min", type=int, default=400)
+    ap.add_argument("--max", type=int, default=1000)
+    ap.add_argument("--n", type=int, default=1)
+    ap.add_argument("--dry-run", action="store_true")
+    a = ap.parse_args()
+    if not a.user:
+        sys.exit("ハンドルが不明。--user か環境変数 ATCODER_USER を指定する。")
+
+    shift = recent_log()
+    lo, hi = a.min + shift, a.max + shift
+
+    problems = get_json(f"{BASE}/resources/problems.json")
+    models = get_json(f"{BASE}/resources/problem-models.json")
+    try:
+        solved = solved_problems(a.user)
+    except Exception as e:
+        sys.exit(f"提出履歴を取得できなかった ({e})。ハンドル名を確認する。")
+
+    pool = []
+    for p in problems:
+        m = models.get(p["id"])
+        if not m or m.get("is_experimental") or "difficulty" not in m:
+            continue
+        d = m["difficulty"]
+        if not (lo <= d <= hi) or p["id"] in solved:
+            continue
+        # ABC の C 以降と、競プロ典型 90 問に絞る（入水に効く帯が集中している）
+        c = p["contest_id"]
+        if c.startswith("abc") and p["problem_index"] >= "C":
+            pool.append((p, d))
+        elif c == "typical90":
+            pool.append((p, d))
+    if not pool:
+        sys.exit(f"Difficulty {lo}〜{hi} に未 AC の候補が無い。帯を広げる。")
+
+    today = datetime.date.today()
+    rng = random.Random(f"{today.isoformat()}:{a.user}")
+    picks = rng.sample(pool, min(a.n, len(pool)))
+    picks.sort(key=lambda x: x[1])
+
+    band = f"Difficulty {lo}〜{hi}"
+    if shift:
+        band += f"（直近の log.md から {shift:+d} 補正）"
+    lines = [
+        f"# 今日の 1 問 — {today.isoformat()}",
+        "",
+        f"対象: {band} / AC 済み {len(solved)} 問を除外 / 候補 {len(pool)} 問",
+        "",
+    ]
+    for p, d in picks:
+        url = f"https://atcoder.jp/contests/{p['contest_id']}/tasks/{p['id']}"
+        lines += [
+            f"## {p['contest_id'].upper()} {p['problem_index']} — {p['name']}",
+            "",
+            f"- Difficulty: **{d}**",
+            f"- {url}",
+            f"- 環境の用意: `bin/new {p['contest_id']} {p['problem_index'].lower()}`",
+            "",
+        ]
+    lines += [
+        "---",
+        "",
+        "30 分考えて解けなければヒントを求める（段階制、`CLAUDE.md` 参照）。",
+        "終わったら `log.md` に 1 行残す。",
+        "",
+    ]
+    body = "\n".join(lines)
+    print(body)
+    if not a.dry_run:
+        with open(os.path.join(ROOT, "today.md"), "w", encoding="utf-8") as f:
+            f.write(body)
+
+
+if __name__ == "__main__":
+    main()
