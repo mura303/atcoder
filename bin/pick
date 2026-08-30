@@ -82,27 +82,23 @@ def handle_from_file():
     return None
 
 
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--user", default=os.environ.get("ATCODER_USER") or handle_from_file())
-    ap.add_argument("--min", type=int, default=400)
-    ap.add_argument("--max", type=int, default=1000)
-    ap.add_argument("--n", type=int, default=1)
-    ap.add_argument("--dry-run", action="store_true")
-    a = ap.parse_args()
-    if not a.user:
-        sys.exit("ハンドルが不明。.atcoder-user に書くか --user で指定する。")
+POOL = os.path.join(ROOT, "pool.json")
 
-    shift = recent_log()
-    lo, hi = a.min + shift, a.max + shift
 
+def logged_problem_ids():
+    """log.md に出てくる問題を、オフライン時の除外に使う。"""
+    path = os.path.join(ROOT, "log.md")
+    if not os.path.exists(path):
+        return set()
+    text = open(path, encoding="utf-8").read().lower()
+    return {t for t in re.findall(r"[a-z0-9_]+_[a-z0-9]+", text)}
+
+
+def build_pool(user, lo, hi):
+    """ネットワークから候補を作る。"""
     problems = get_json(f"{BASE}/resources/problems.json")
     models = get_json(f"{BASE}/resources/problem-models.json")
-    try:
-        solved = solved_problems(a.user)
-    except Exception as e:
-        sys.exit(f"提出履歴を取得できなかった ({e})。ハンドル名を確認する。")
-
+    solved = solved_problems(user)
     pool = []
     for p in problems:
         m = models.get(p["id"])
@@ -113,17 +109,88 @@ def main():
             continue
         # ABC の C 以降と、競プロ典型 90 問に絞る（入水に効く帯が集中している）
         c = p["contest_id"]
-        if c.startswith("abc") and p["problem_index"] >= "C":
-            pool.append((p, d))
-        elif c == "typical90":
-            pool.append((p, d))
+        if (c.startswith("abc") and p["problem_index"] >= "C") or c == "typical90":
+            pool.append(
+                {
+                    "id": p["id"],
+                    "contest_id": c,
+                    "index": p["problem_index"],
+                    "name": p["name"],
+                    "difficulty": d,
+                }
+            )
+    return pool, len(solved)
+
+
+def save_pool(pool, user, lo, hi, solved_count):
+    with open(POOL, "w", encoding="utf-8") as f:
+        json.dump(
+            {
+                "built": datetime.date.today().isoformat(),
+                "user": user,
+                "band": [lo, hi],
+                "solved_count": solved_count,
+                "problems": pool,
+            },
+            f,
+            ensure_ascii=False,
+            indent=1,
+        )
+
+
+def load_pool(lo, hi):
+    """ネットワークが無いときの代替。log.md に出た問題は除く。"""
+    if not os.path.exists(POOL):
+        return None, None, None
+    data = json.load(open(POOL, encoding="utf-8"))
+    seen = logged_problem_ids()
+    pool = [
+        p
+        for p in data["problems"]
+        if lo <= p["difficulty"] <= hi and p["id"] not in seen
+    ]
+    age = (datetime.date.today() - datetime.date.fromisoformat(data["built"])).days
+    return pool, age, data.get("solved_count")
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--user", default=os.environ.get("ATCODER_USER") or handle_from_file())
+    ap.add_argument("--min", type=int, default=400)
+    ap.add_argument("--max", type=int, default=1000)
+    ap.add_argument("--n", type=int, default=1)
+    ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--refresh", action="store_true",
+                    help="候補プールを再取得して pool.json に保存する（ネットワーク必須）")
+    a = ap.parse_args()
+    if not a.user:
+        sys.exit("ハンドルが不明。.atcoder-user に書くか --user で指定する。")
+
+    shift = recent_log()
+    lo, hi = a.min + shift, a.max + shift
+
+    source, stale = "オンライン", None
+    try:
+        pool, solved_count = build_pool(a.user, lo, hi)
+        save_pool(pool, a.user, lo, hi, solved_count)
+    except Exception as e:
+        if a.refresh:
+            sys.exit(f"候補プールを再取得できなかった: {e}")
+        # クラウドのサンドボックスなど、外部 API に出られない環境向けの代替。
+        pool, stale, solved_count = load_pool(lo, hi)
+        if pool is None:
+            sys.exit(
+                f"ネットワークに出られず ({e})、pool.json も無い。"
+                f"ネットワークのある環境で `bin/pick --refresh` を実行して commit する。"
+            )
+        source = f"pool.json（{stale} 日前に作成）"
     if not pool:
         sys.exit(f"Difficulty {lo}〜{hi} に未 AC の候補が無い。帯を広げる。")
 
     today = datetime.date.today()
     rng = random.Random(f"{today.isoformat()}:{a.user}")
     picks = rng.sample(pool, min(a.n, len(pool)))
-    picks.sort(key=lambda x: x[1])
+    picks.sort(key=lambda p: p["difficulty"])
 
     band = f"Difficulty {lo}〜{hi}"
     if shift:
@@ -131,17 +198,23 @@ def main():
     lines = [
         f"# 今日の 1 問 — {today.isoformat()}",
         "",
-        f"対象: {band} / AC 済み {len(solved)} 問を除外 / 候補 {len(pool)} 問",
+        f"対象: {band} / AC 済み {solved_count} 問を除外 / 候補 {len(pool)} 問 / 出典 {source}",
         "",
     ]
-    for p, d in picks:
+    for p in picks:
         url = f"https://atcoder.jp/contests/{p['contest_id']}/tasks/{p['id']}"
         lines += [
-            f"## {p['contest_id'].upper()} {p['problem_index']} — {p['name']}",
+            f"## {p['contest_id'].upper()} {p['index']} — {p['name']}",
             "",
-            f"- Difficulty: **{d}**",
+            f"- Difficulty: **{p['difficulty']}**",
             f"- {url}",
-            f"- 環境の用意: `bin/new {p['contest_id']} {p['problem_index'].lower()}`",
+            f"- 環境の用意: `bin/new {p['contest_id']} {p['index'].lower()}`",
+            "",
+        ]
+    if stale is not None and stale > 14:
+        lines += [
+            f"> ⚠ pool.json が {stale} 日前のもの。ネットワークのある環境で "
+            f"`bin/pick --refresh` を実行して commit すると、最近 AC した問題が除外される。",
             "",
         ]
     lines += [

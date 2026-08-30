@@ -46,6 +46,28 @@ contests/abc428/
 - **深い再帰** — 既定スタックで落ちることがある。DFS は明示スタックにするか、
   `std::thread::Builder::new().stack_size(64 << 20)` で回す。
 
+## 毎日の流れ
+
+朝 6:53 にクラウドの routine が動き、`bin/pick` で選んだ「今日の1問」が
+スマホの Claude アプリ (claude.ai/code) にセッションとして届く。
+移動中はそこで壁打ちし（ヒントは段階制、`CLAUDE.md` 参照）、実装は Mac に戻ってから。
+
+```sh
+bin/pick              # 今日の1問を選ぶ（手元でも実行できる）
+bin/pick --n 3        # 3 問出す
+bin/pick --min 600 --max 1200
+bin/pick --refresh    # 候補プール pool.json を作り直す
+```
+
+**クラウドのサンドボックスは kenkoooo.com に出られない**（egress 403）。
+そのため候補は `pool.json` としてリポジトリに置いてあり、routine はそれを読む。
+`bin/pick` は手元で実行すればオンラインで取り直して `pool.json` を更新するので、
+**週 1 回くらい `bin/pick --refresh` して commit** すれば、最近 AC した問題が候補から消える。
+14 日以上放置すると routine の出力に警告が出る。
+
+なお `bin/pick` は `log.md` に書いた問題 ID も除外するので、
+ログさえ書いていればプールが多少古くても同じ問題は出にくい。
+
 ## 精進の進め方
 
 `ROADMAP.md` を参照。
