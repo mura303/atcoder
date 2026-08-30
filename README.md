@@ -59,10 +59,13 @@ bin/pick --min 600 --max 1200
 bin/pick --refresh    # 候補プール pool.json を作り直す
 ```
 
-**クラウドのサンドボックスは kenkoooo.com に出られない**（egress 403）。
+**クラウドのサンドボックスは kenkoooo.com にも atcoder.jp にも出られない**（egress 403）。
 そのため候補は `pool.json` としてリポジトリに置いてあり、routine はそれを読む。
-`bin/pick` は手元で実行すればオンラインで取り直して `pool.json` を更新するので、
+`--refresh` のときに**問題文の冒頭と制約も先読みして** `pool.json` に埋めるので、
+朝の通知だけでスマホから考察を始められる（AtCoder を開き直す必要がない）。
+
 **週 1 回くらい `bin/pick --refresh` して commit** すれば、最近 AC した問題が候補から消える。
+初回は全問ぶん取りに行くので 2 分ほどかかるが、取得済みは再取得しないので 2 回目以降は速い。
 14 日以上放置すると routine の出力に警告が出る。
 
 なお `bin/pick` は `log.md` に書いた問題 ID も除外するので、

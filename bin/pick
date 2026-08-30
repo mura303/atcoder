@@ -159,15 +159,19 @@ def build_pool(user, lo, hi, briefs=False, cache=None):
                 }
             )
 
+    # 先読み済みの問題文は常に引き継ぐ。--refresh でない通常実行で消してしまうと、
+    # クラウドの routine が問題文を出せなくなる。
+    cache = cache or {}
+    for p in pool:
+        if cache.get(p["id"]):
+            p["brief"] = cache[p["id"]]
+
     if briefs:
         # クラウドの routine は atcoder.jp にも出られないため、ここで先読みして
         # pool.json に埋めておく。既に取れているものは再取得しない。
-        cache = cache or {}
-        todo = [p for p in pool if p["id"] not in cache]
+        todo = [p for p in pool if not p.get("brief")]
         for i, p in enumerate(pool, 1):
-            hit = cache.get(p["id"])
-            if hit:
-                p["brief"] = hit
+            if p.get("brief"):
                 continue
             url = f"https://atcoder.jp/contests/{p['contest_id']}/tasks/{p['id']}"
             try:
