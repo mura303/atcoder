@@ -1,0 +1,5 @@
+# AtCoder のジャッジ (2025/10 新ジャッジ) と同じ rustc を使う。
+# ローカルで通ったものがジャッジでも通る、を保証するための固定。
+[toolchain]
+channel = "1.89.0"
+components = ["rustfmt", "clippy"]

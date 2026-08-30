@@ -1,0 +1,140 @@
+#!/usr/bin/env python3
+"""サンプルケースでローカル判定する。
+
+    bin/t abc430 c              # contests/abc430/tests/c/*.in を全部流す
+    bin/t abc430 c 2            # 2 番のケースだけ
+    bin/t abc430 c --tl 3       # 実行時間制限を 3 秒に (既定 2 秒)
+
+実行は release ビルド。ワークスペースの [profile.release] で overflow-checks を
+有効にしてあるので、i64 の桁溢れはここで panic して見つかる。
+"""
+import os
+import subprocess
+import sys
+import time
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+GREEN, RED, YELLOW, DIM, RESET = "\033[32m", "\033[31m", "\033[33m", "\033[2m", "\033[0m"
+
+
+def normalize(text):
+    lines = [l.rstrip() for l in text.replace("\r\n", "\n").split("\n")]
+    while lines and lines[-1] == "":
+        lines.pop()
+    return lines
+
+
+def matches(expected, actual):
+    exp, act = normalize(expected), normalize(actual)
+    if exp == act:
+        return True
+    # 実数出力の問題向けに、相対/絶対誤差 1e-6 までは許容する
+    et, at = " ".join(exp).split(), " ".join(act).split()
+    if len(et) != len(at):
+        return False
+    try:
+        for e, a in zip(et, at):
+            if e == a:
+                continue
+            ev, av = float(e), float(a)
+            if abs(ev - av) > 1e-6 * max(1.0, abs(ev)):
+                return False
+        return True
+    except ValueError:
+        return False
+
+
+def show_diff(expected, actual):
+    exp, act = normalize(expected), normalize(actual)
+    for i in range(max(len(exp), len(act))):
+        e = exp[i] if i < len(exp) else "(なし)"
+        a = act[i] if i < len(act) else "(なし)"
+        mark = " " if e == a else ">"
+        color = DIM if e == a else RESET
+        print(f"    {mark} {color}期待 {e!r:<30} 実際 {a!r}{RESET}")
+        if i > 30:
+            print("    ... (以下略)")
+            break
+
+
+def main():
+    argv = sys.argv[1:]
+    tl = 2.0
+    if "--tl" in argv:
+        i = argv.index("--tl")
+        tl = float(argv[i + 1])
+        del argv[i : i + 2]
+    if len(argv) < 2:
+        sys.exit(__doc__)
+    contest, problem, only = argv[0], argv[1], (argv[2] if len(argv) > 2 else None)
+
+    build = subprocess.run(
+        ["cargo", "build", "--release", "-p", contest, "--bin", problem],
+        cwd=ROOT,
+    )
+    if build.returncode != 0:
+        sys.exit(build.returncode)
+
+    binary = os.path.join(ROOT, "target", "release", problem)
+    tests = os.path.join(ROOT, "contests", contest, "tests", problem)
+    if not os.path.isdir(tests):
+        sys.exit(f"{tests} が無い。bin/new でサンプルを取るか、手で置く。")
+    names = sorted(
+        (f[:-3] for f in os.listdir(tests) if f.endswith(".in")),
+        key=lambda s: (len(s), s),
+    )
+    if only:
+        names = [n for n in names if n == only]
+    if not names:
+        sys.exit(f"{tests} にテストケースが無い。")
+
+    failed = []
+    for name in names:
+        with open(os.path.join(tests, name + ".in"), encoding="utf-8") as f:
+            inp = f.read()
+        expected_path = os.path.join(tests, name + ".out")
+        expected = (
+            open(expected_path, encoding="utf-8").read()
+            if os.path.exists(expected_path)
+            else None
+        )
+
+        start = time.perf_counter()
+        try:
+            proc = subprocess.run(
+                [binary], input=inp, capture_output=True, text=True, timeout=tl
+            )
+        except subprocess.TimeoutExpired:
+            print(f"  {RED}TLE{RESET} {name}  (> {tl}s)")
+            failed.append(name)
+            continue
+        elapsed = time.perf_counter() - start
+
+        if proc.returncode != 0:
+            print(f"  {RED}RE {RESET} {name}  (exit {proc.returncode}, {elapsed:.3f}s)")
+            print(f"{DIM}{proc.stderr.rstrip()}{RESET}")
+            failed.append(name)
+            continue
+
+        slow = f"  {YELLOW}[遅い]{RESET}" if elapsed > tl * 0.5 else ""
+        if expected is None:
+            print(f"  {YELLOW}?  {RESET} {name}  ({elapsed:.3f}s) 期待出力なし")
+            print(f"{DIM}{proc.stdout.rstrip()}{RESET}")
+        elif matches(expected, proc.stdout):
+            print(f"  {GREEN}AC {RESET} {name}  ({elapsed:.3f}s){slow}")
+        else:
+            print(f"  {RED}WA {RESET} {name}  ({elapsed:.3f}s)")
+            show_diff(expected, proc.stdout)
+            if proc.stderr.strip():
+                print(f"{DIM}{proc.stderr.rstrip()}{RESET}")
+            failed.append(name)
+
+    total = len(names)
+    if failed:
+        print(f"\n{RED}{total - len(failed)}/{total} AC{RESET}  失敗: {' '.join(failed)}")
+        sys.exit(1)
+    print(f"\n{GREEN}{total}/{total} AC{RESET}  提出してよい")
+
+
+if __name__ == "__main__":
+    main()

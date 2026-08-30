@@ -1,0 +1,36 @@
+[workspace]
+resolver = "2"
+members = ["contests/*"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+
+# --- AtCoder ジャッジ (2025/10) に存在するクレートのみ、バージョンを固定して列挙する。
+# ここに無いクレートを使うと「ローカルでは通るがジャッジで CE」になるので、
+# 使いたいものが増えたら必ず下記の公式一覧で存在を確認してから追加すること。
+#   https://img.atcoder.jp/file/language-update/2025-10/language-list.html
+[workspace.dependencies]
+proconio      = { version = "=0.5.0", features = ["derive"] }
+ac-library-rs = "=0.2.0"
+itertools     = "=0.14.0"
+num           = "=0.4.3"
+num-integer   = "=0.1.46"
+num-bigint    = "=0.4.6"
+petgraph      = "=0.8.2"
+rand          = "=0.9.2"
+superslice    = "=1.0.0"
+ordered-float = "=5.0.0"
+smallvec      = "=1.15.1"
+rustc-hash    = "=2.1.1"
+fixedbitset   = "=0.5.7"
+permutohedron = "=0.2.4"
+maplit        = "=1.0.2"
+either        = "=1.15.0"
+memoise       = "=0.3.2"
+
+[profile.release]
+# ジャッジと同じ最適化レベルで測りつつ、i64 溢れなどの典型バグをローカルで即座に検出する。
+# ジャッジ側は overflow-checks = false なので、ここで panic したら「本番では黙って誤答になる」バグ。
+overflow-checks = true
+debug           = true

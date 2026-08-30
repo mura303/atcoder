@@ -1,0 +1,145 @@
+#!/usr/bin/env python3
+"""コンテスト用パッケージを作り、サンプルケースを取ってくる。
+
+    bin/new abc430           # 全問ぶん
+    bin/new abc430 d e       # 一部だけ
+    bin/new abc430 --no-fetch a b c d   # サンプルは自分で置く (開催中など)
+
+過去問ページはログイン不要で読めるので、精進用途ならこれで足りる。
+開催中のコンテストは非公開でサンプルを取れないため --no-fetch を使い、
+tests/<問題>/1.in, 1.out を手で置く。
+"""
+import html
+import os
+import re
+import sys
+import time
+import urllib.error
+import urllib.request
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+UA = (
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
+    "(KHTML, like Gecko) Chrome/126.0 Safari/537.36"
+)
+
+
+def get(url):
+    req = urllib.request.Request(url, headers={"User-Agent": UA})
+    with urllib.request.urlopen(req, timeout=30) as r:
+        return r.read().decode("utf-8", "replace")
+
+
+def fetch_tasks(contest):
+    """[(問題記号, タスク URL)] を返す。"""
+    body = get(f"https://atcoder.jp/contests/{contest}/tasks?lang=ja")
+    seen, out = set(), []
+    for m in re.finditer(
+        r'<td[^>]*>\s*<a href="(/contests/[^"]+/tasks/([^"]+))">([^<]+)</a>', body
+    ):
+        path, task_id, label = m.group(1), m.group(2), html.unescape(m.group(3)).strip()
+        if task_id in seen:
+            continue
+        seen.add(task_id)
+        out.append((label.split()[0].lower(), "https://atcoder.jp" + path))
+    return out
+
+
+def fetch_samples(url):
+    """[(入力, 出力)] を返す。"""
+    body = get(url + "?lang=ja")
+
+    def collect(kind):
+        return {
+            int(m.group(1)): html.unescape(re.sub(r"<[^>]+>", "", m.group(2)))
+            for m in re.finditer(
+                rf"<h3>{kind}例\s*(\d+)</h3>\s*<pre[^>]*>(.*?)</pre>", body, re.S
+            )
+        }
+
+    ins, outs = collect("入力"), collect("出力")
+    return [(ins[i], outs[i]) for i in sorted(ins) if i in outs]
+
+
+def write(path, text):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(text)
+
+
+def main():
+    args = [a for a in sys.argv[1:] if a != "--no-fetch"]
+    do_fetch = "--no-fetch" not in sys.argv
+    if not args:
+        sys.exit(__doc__)
+    contest, want = args[0], {p.lower() for p in args[1:]}
+
+    letters, urls = [], {}
+    if do_fetch:
+        try:
+            for letter, url in fetch_tasks(contest):
+                letters.append(letter)
+                urls[letter] = url
+        except urllib.error.HTTPError as e:
+            sys.exit(
+                f"タスク一覧を取得できなかった ({e.code})。コンテスト ID を確認するか、"
+                f"開催中なら --no-fetch と問題記号を指定して作る。"
+            )
+        if not letters:
+            sys.exit("問題が見つからなかった (コンテスト ID を確認)")
+    else:
+        if not want:
+            sys.exit("--no-fetch のときは問題記号を並べて指定する: bin/new abc430 --no-fetch a b c")
+        letters = sorted(want)
+
+    targets = [l for l in letters if not want or l in want]
+    pkg = os.path.join(ROOT, "contests", contest)
+    template = open(os.path.join(ROOT, "template", "main.rs"), encoding="utf-8").read()
+
+    write(
+        os.path.join(pkg, "Cargo.toml"),
+        f'''[package]
+name = "{contest}"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+proconio.workspace = true
+ac-library-rs.workspace = true
+itertools.workspace = true
+num.workspace = true
+num-integer.workspace = true
+superslice.workspace = true
+rustc-hash.workspace = true
+''',
+    )
+
+    for letter in targets:
+        src = os.path.join(pkg, "src", "bin", f"{letter}.rs")
+        if os.path.exists(src):
+            print(f"{letter}: src はすでにある (残す)")
+        else:
+            url = urls.get(letter, f"https://atcoder.jp/contests/{contest}/tasks/")
+            write(src, template.replace("{{PROBLEM}}", url))
+
+        if not do_fetch:
+            os.makedirs(os.path.join(pkg, "tests", letter), exist_ok=True)
+            print(f"{letter}: 作成 (サンプルは tests/{letter}/1.in, 1.out に手で置く)")
+            continue
+
+        try:
+            cases = fetch_samples(urls[letter])
+        except urllib.error.HTTPError as e:
+            print(f"{letter}: サンプル取得に失敗 ({e.code})")
+            continue
+        for i, (inp, outp) in enumerate(cases, 1):
+            write(os.path.join(pkg, "tests", letter, f"{i}.in"), inp)
+            write(os.path.join(pkg, "tests", letter, f"{i}.out"), outp)
+        print(f"{letter}: 作成 (サンプル {len(cases)} 件)")
+        time.sleep(0.5)
+
+    print(f"\n-> contests/{contest}/src/bin/*.rs を編集して、bin/t {contest} {targets[0]}")
+
+
+if __name__ == "__main__":
+    main()
