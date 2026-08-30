@@ -1,6 +1,6 @@
 # 今日の 1 問 — 2026-08-30
 
-対象: Difficulty 400〜1000 / AC 済み 29 問を除外 / 候補 163 問 / 出典 pool.json（0 日前に作成）
+対象: Difficulty 400〜1000 / AC 済み 29 問を除外 / 候補 163 問 / 出典 オンライン
 
 ## ABC467 C — Adjacent Sums (easy)
 
