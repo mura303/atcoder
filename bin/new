@@ -8,8 +8,14 @@
 過去問ページはログイン不要で読めるので、精進用途ならこれで足りる。
 開催中のコンテストは非公開でサンプルを取れないため --no-fetch を使い、
 tests/<問題>/1.in, 1.out を手で置く。
+
+atcoder.jp に出られない環境 (クラウドのサンドボックス) では、pool.json に
+先読みしてあるサンプルを自動で使う。ただし問題記号の指定が要る:
+
+    bin/new abc467 c
 """
 import html
+import json
 import os
 import re
 import sys
@@ -51,7 +57,9 @@ def fetch_samples(url):
 
     def collect(kind):
         return {
-            int(m.group(1)): html.unescape(re.sub(r"<[^>]+>", "", m.group(2)))
+            int(m.group(1)): html.unescape(re.sub(r"<[^>]+>", "", m.group(2))).replace(
+                "\r\n", "\n"
+            )
             for m in re.finditer(
                 rf"<h3>{kind}例\s*(\d+)</h3>\s*<pre[^>]*>(.*?)</pre>", body, re.S
             )
@@ -59,6 +67,29 @@ def fetch_samples(url):
 
     ins, outs = collect("入力"), collect("出力")
     return [(ins[i], outs[i]) for i in sorted(ins) if i in outs]
+
+
+def from_pool(contest, letters):
+    """atcoder.jp に出られないときの代替。{記号: (URL, [(入力, 出力)])} を返す。
+
+    pool.json の問題 ID は contest_letter とは限らない (abc065 C は arc076_a) ので、
+    contest_id と index で引く。
+    """
+    path = os.path.join(ROOT, "pool.json")
+    if not os.path.exists(path):
+        return {}
+    data = json.load(open(path, encoding="utf-8"))
+    out = {}
+    for p in data.get("problems", []):
+        letter = p["index"].lower()
+        if p["contest_id"] != contest or letter not in letters:
+            continue
+        brief = p.get("brief") or {}
+        out[letter] = (
+            f"https://atcoder.jp/contests/{p['contest_id']}/tasks/{p['id']}",
+            [(c["in"], c["out"]) for c in brief.get("samples", [])],
+        )
+    return out
 
 
 def write(path, text):
@@ -74,7 +105,7 @@ def main():
         sys.exit(__doc__)
     contest, want = args[0], {p.lower() for p in args[1:]}
 
-    letters, urls = [], {}
+    letters, urls, pooled = [], {}, {}
     if do_fetch:
         try:
             for letter, url in fetch_tasks(contest):
@@ -85,6 +116,25 @@ def main():
                 f"タスク一覧を取得できなかった ({e.code})。コンテスト ID を確認するか、"
                 f"開催中なら --no-fetch と問題記号を指定して作る。"
             )
+        except OSError as e:
+            # クラウドのサンドボックスなど、atcoder.jp に出られない環境。
+            if not want:
+                sys.exit(
+                    f"atcoder.jp に出られず ({e})、問題記号も指定されていない。"
+                    f"pool.json から作るには記号が要る: bin/new {contest} c"
+                )
+            pooled = from_pool(contest, want)
+            missing = sorted(want - set(pooled))
+            if missing:
+                sys.exit(
+                    f"atcoder.jp に出られず ({e})、pool.json にも "
+                    f"{contest} {' '.join(missing)} が無い。"
+                    f"ネットワークのある環境で bin/new を実行する。"
+                )
+            do_fetch = False
+            letters = sorted(pooled)
+            urls = {l: pooled[l][0] for l in letters}
+            print("atcoder.jp に出られないので pool.json のサンプルを使う")
         if not letters:
             sys.exit("問題が見つからなかった (コンテスト ID を確認)")
     else:
@@ -123,8 +173,15 @@ rustc-hash.workspace = true
             write(src, template.replace("{{PROBLEM}}", url))
 
         if not do_fetch:
-            os.makedirs(os.path.join(pkg, "tests", letter), exist_ok=True)
-            print(f"{letter}: 作成 (サンプルは tests/{letter}/1.in, 1.out に手で置く)")
+            cases = pooled.get(letter, (None, []))[1]
+            if not cases:
+                os.makedirs(os.path.join(pkg, "tests", letter), exist_ok=True)
+                print(f"{letter}: 作成 (サンプルは tests/{letter}/1.in, 1.out に手で置く)")
+                continue
+            for i, (inp, outp) in enumerate(cases, 1):
+                write(os.path.join(pkg, "tests", letter, f"{i}.in"), inp + "\n")
+                write(os.path.join(pkg, "tests", letter, f"{i}.out"), outp + "\n")
+            print(f"{letter}: 作成 (pool.json のサンプル {len(cases)} 件)")
             continue
 
         try:

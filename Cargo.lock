@@ -16,6 +16,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "abc071"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
 name = "abc141"
 version = "0.1.0"
 dependencies = [

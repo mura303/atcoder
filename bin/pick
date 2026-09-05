@@ -103,7 +103,11 @@ def clean_text(raw):
 
 
 def fetch_brief(url):
-    """問題文の冒頭と制約を取ってくる。スマホで読む用の下ごしらえ。"""
+    """問題文の冒頭・制約・サンプルを取ってくる。スマホで読む/解く用の下ごしらえ。
+
+    クラウドのサンドボックスは atcoder.jp に出られないので、サンプルもここで
+    取って pool.json に入れておく。これが無いと移動中に bin/t が回せない。
+    """
     req = urllib.request.Request(
         url + "?lang=ja",
         headers={
@@ -118,10 +122,32 @@ def fetch_brief(url):
         m = re.search(rf"<h3>{name}</h3>(.*?)</section>", body, re.S)
         return clean_text(m.group(1)) if m else []
 
+    def samples():
+        def collect(kind):
+            return {
+                int(m.group(1)): html.unescape(
+                    re.sub(r"<[^>]+>", "", m.group(2))
+                ).replace("\r\n", "\n").strip("\n")
+                for m in re.finditer(
+                    rf"<h3>{kind}例\s*(\d+)</h3>\s*<pre[^>]*>(.*?)</pre>", body, re.S
+                )
+            }
+
+        ins, outs = collect("入力"), collect("出力")
+        return [{"in": ins[i], "out": outs[i]} for i in sorted(ins) if i in outs]
+
     statement = " ".join(section("問題文"))
     if len(statement) > 600:
         statement = statement[:600] + "…"
-    return {"statement": statement, "constraints": section("制約")}
+    # インタラクティブ問題にはサンプルが無く、bin/t で判定できない。
+    # さらに #[fastout] を付けたままだと出力が届かず固まるので、出題時に警告する。
+    interactive = re.search(r"<h3[^>]*>\s*(入出力例|Sample Interaction)\s*</h3>", body)
+    return {
+        "statement": statement,
+        "constraints": section("制約"),
+        "samples": samples(),
+        "interactive": bool(interactive),
+    }
 
 
 def logged_problem_ids():
@@ -169,9 +195,12 @@ def build_pool(user, lo, hi, briefs=False, cache=None):
     if briefs:
         # クラウドの routine は atcoder.jp にも出られないため、ここで先読みして
         # pool.json に埋めておく。既に取れているものは再取得しない。
-        todo = [p for p in pool if not p.get("brief")]
+        def done(p):
+            return "interactive" in (p.get("brief") or {})
+
+        todo = [p for p in pool if not done(p)]
         for i, p in enumerate(pool, 1):
-            if p.get("brief"):
+            if done(p):
                 continue
             url = f"https://atcoder.jp/contests/{p['contest_id']}/tasks/{p['id']}"
             try:
@@ -289,6 +318,12 @@ def main():
             lines += ["**制約**", ""]
             lines += [f"- {c}" for c in brief["constraints"]]
             lines += [""]
+        if brief.get("interactive"):
+            lines += [
+                "> ⚠ インタラクティブ問題。`#[fastout]` を外すこと（出力がバッファに"
+                "溜まって届かなくなる）。サンプル判定 `bin/t` は使えない。",
+                "",
+            ]
     if stale is not None and stale > 14:
         lines += [
             f"> ⚠ pool.json が {stale} 日前のもの。ネットワークのある環境で "
