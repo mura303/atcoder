@@ -13,9 +13,33 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        a: [i64; n],
+        mut a: [i64; n],
     }
 
-    let ans: i64 = a.iter().sum();
-    println!("{}", ans);
+    // aを大きい順に並び替える
+    a.sort_by(|a, b| b.cmp(a));
+
+    // 整数の配列（動的サイズ）を宣言
+    let mut b = Vec::new();
+    
+    let mut i = 0;
+    while i < a.len() - 1 {
+        if a[i] == a[i+1] {
+            b.push(a[i]);
+            i += 1;
+        }
+
+        // bの要素数が2つ以上になったらループを抜ける
+        if b.len() >= 2 {
+            break;
+        }
+        i +=1 ;
+    }
+
+    if b.len() < 2 {
+        println!("0");
+    }else{
+        println!("{}", b[0] * b[1]);
+    }
+
 }
