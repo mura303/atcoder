@@ -3,6 +3,58 @@
 version = 4
 
 [[package]]
+name = "abc065"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "abc141"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "abc198"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "abc199"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
 name = "abc428"
 version = "0.1.0"
 dependencies = [

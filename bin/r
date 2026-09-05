@@ -1,0 +1,42 @@
+#!/usr/bin/env python3
+"""コンテスト用バイナリを 1 回だけ実行する。
+
+    bin/r abc430 c               # contests/abc430/src/bin/c.rs を通常実行
+    bin/r abc430 c < input.txt    # 標準入力を流し込んで実行
+
+標準入力が端末なら contests/<contest>/tests/<problem>/1.in を流す。
+release ビルドでコンパイルして、そのまま実行する。サンプル比較はしない。
+"""
+import os
+import subprocess
+import sys
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+def main():
+    argv = sys.argv[1:]
+    if len(argv) < 2:
+        sys.exit(__doc__)
+
+    contest, problem = argv[0], argv[1]
+    default_input = os.path.join(ROOT, "contests", contest, "tests", problem, "1.in")
+
+    build = subprocess.run(
+        ["cargo", "build", "--release", "-p", contest, "--bin", problem],
+        cwd=ROOT,
+    )
+    if build.returncode != 0:
+        sys.exit(build.returncode)
+
+    binary = os.path.join(ROOT, "target", "release", problem)
+    if sys.stdin.isatty():
+        with open(default_input, encoding="utf-8") as f:
+            input_text = f.read()
+        sys.exit(subprocess.run([binary], input=input_text, text=True).returncode)
+
+    sys.exit(subprocess.run([binary]).returncode)
+
+
+if __name__ == "__main__":
+    main()
