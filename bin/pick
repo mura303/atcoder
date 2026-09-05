@@ -129,7 +129,10 @@ def fetch_brief(url):
                     re.sub(r"<[^>]+>", "", m.group(2))
                 ).replace("\r\n", "\n").strip("\n")
                 for m in re.finditer(
-                    rf"<h3>{kind}例\s*(\d+)</h3>\s*<pre[^>]*>(.*?)</pre>", body, re.S
+                    # 古いコンテストは <h3> と <pre> の間に <section> が挟まる
+                    rf"<h3[^>]*>\s*{kind}例\s*(\d+)\s*</h3>(?:(?!<h3).)*?<pre[^>]*>(.*?)</pre>",
+                    body,
+                    re.S,
                 )
             }
 
@@ -143,6 +146,7 @@ def fetch_brief(url):
     # さらに #[fastout] を付けたままだと出力が届かず固まるので、出題時に警告する。
     interactive = re.search(r"<h3[^>]*>\s*(入出力例|Sample Interaction)\s*</h3>", body)
     return {
+        "v": 2,
         "statement": statement,
         "constraints": section("制約"),
         "samples": samples(),
@@ -150,13 +154,37 @@ def fetch_brief(url):
     }
 
 
-def logged_problem_ids():
-    """log.md に出てくる問題を、オフライン時の除外に使う。"""
+def logged_problems():
+    """log.md に出てくる問題を、次の出題から除く。
+
+    書式は `2026-09-05 ABC199 C 解説AC ...` なので (コンテスト, 記号) の組で拾う。
+    問題 ID が直接書かれていることもあるので、そちらも拾う。
+    戻り値は (組の集合, ID の集合)。
+    """
     path = os.path.join(ROOT, "log.md")
     if not os.path.exists(path):
-        return set()
+        return set(), set()
     text = open(path, encoding="utf-8").read().lower()
-    return {t for t in re.findall(r"[a-z0-9_]+_[a-z0-9]+", text)}
+    pairs = set(re.findall(r"^\d{4}-\d{2}-\d{2}\s+(\S+)\s+(\S+)", text, re.M))
+    ids = set(re.findall(r"[a-z0-9]+_[a-z0-9]+", text))
+    return pairs, ids
+
+
+def excluded(p, pairs, ids):
+    return (
+        p["id"] in ids
+        or (p["contest_id"].lower(), str(p["index"]).lower()) in pairs
+    )
+
+
+SENKEI = os.path.join(ROOT, "senkei100.json")
+
+
+def load_senkei():
+    """精選 100 問（分野順のカリキュラム）。AOJ のままの 8 問は id が無い。"""
+    if not os.path.exists(SENKEI):
+        return []
+    return json.load(open(SENKEI, encoding="utf-8"))["problems"]
 
 
 def build_pool(user, lo, hi, briefs=False, cache=None):
@@ -185,6 +213,25 @@ def build_pool(user, lo, hi, briefs=False, cache=None):
                 }
             )
 
+    # 精選 100 問はカリキュラムなので、難易度帯や AC 済みに関係なく必ず持っておく。
+    # ランダム帯と重複したものは、こちらに寄せる。
+    senkei = [e for e in load_senkei() if e.get("id")]
+    ids = {e["id"] for e in senkei}
+    pool = [p for p in pool if p["id"] not in ids]
+    for e in senkei:
+        pool.append(
+            {
+                "id": e["id"],
+                "contest_id": e["contest_id"],
+                "index": e["index"],
+                "name": e["name"],
+                "difficulty": e.get("difficulty"),
+                "senkei": e["no"],
+                "category": e["category"],
+                "solved": e["id"] in solved,
+            }
+        )
+
     # 先読み済みの問題文は常に引き継ぐ。--refresh でない通常実行で消してしまうと、
     # クラウドの routine が問題文を出せなくなる。
     cache = cache or {}
@@ -196,7 +243,8 @@ def build_pool(user, lo, hi, briefs=False, cache=None):
         # クラウドの routine は atcoder.jp にも出られないため、ここで先読みして
         # pool.json に埋めておく。既に取れているものは再取得しない。
         def done(p):
-            return "interactive" in (p.get("brief") or {})
+            # v を上げると全件取り直す。取得の仕方を変えたときに使う。
+            return (p.get("brief") or {}).get("v") == 2
 
         todo = [p for p in pool if not done(p)]
         for i, p in enumerate(pool, 1):
@@ -215,6 +263,93 @@ def build_pool(user, lo, hi, briefs=False, cache=None):
     return pool, len(solved)
 
 
+def split_pool(pool, lo, hi, pairs, ids):
+    """(精選100問の並び, 難易度帯のランダム候補) に分ける。"""
+    senkei = sorted((p for p in pool if p.get("senkei")), key=lambda p: p["senkei"])
+    band = [
+        p
+        for p in pool
+        if not p.get("senkei")
+        and p.get("difficulty") is not None
+        and lo <= p["difficulty"] <= hi
+        and not excluded(p, pairs, ids)
+    ]
+    return senkei, band
+
+
+CHECKLIST = os.path.join(ROOT, "SENKEI100.md")
+
+
+def write_checklist(senkei, pairs, ids):
+    """SENKEI100.md を進捗つきで作り直す。--refresh のときだけ呼ぶ。"""
+    meta = json.load(open(SENKEI, encoding="utf-8"))
+    entries = meta["problems"]
+    state = {p["id"]: p for p in senkei}
+    n_atc = sum(1 for e in entries if e.get("id"))
+    n_rep = sum(1 for e in entries if e.get("replaces"))
+    done = sum(
+        1
+        for e in entries
+        if e.get("id")
+        and (
+            (state.get(e["id"]) or {}).get("solved")
+            or excluded({"id": e["id"], "contest_id": e["contest_id"], "index": e["index"]},
+                        pairs, ids)
+        )
+    )
+    out = [
+        "# 分野別 初中級者が解くべき過去問精選 100 問",
+        "",
+        f"出典: {meta['source']}（E869120 さん）",
+        "",
+        f"**進捗 {done} / {n_atc}**（AtCoder 分のみ。目安は 100 問中 70 問、",
+        "全部解けたら青相当）。`bin/pick --refresh` で作り直される。",
+        "",
+        "毎日の 1 問はこのリストから**分野順に**出る。手で編集しても次の",
+        "`--refresh` で上書きされるので、記録は `log.md` に書く。",
+        "",
+        f"AtCoder {n_atc} 問 / AOJ {len(entries) - n_atc} 問。うち {n_rep} 問は、",
+        "AOJ の基本問題を AtCoder の同等問題に読み替えてある（`bin/new`・`bin/t`・",
+        "スマホからの実装をそのまま使うため）。元の問題名を併記した。",
+        "",
+        "AOJ のまま残した問題は代替が見つからなかったもの。ブラウザで解いて",
+        "`log.md` に記録する。`bin/pick` の出題からは外れる。",
+        "",
+    ]
+    cats = []
+    for e in entries:
+        if e["category"] not in cats:
+            cats.append(e["category"])
+    for c in cats:
+        out += [f"## {c}", ""]
+        for e in [x for x in entries if x["category"] == c]:
+            if not e.get("id"):
+                out.append(f"- [ ] **{e['no']}** {e['name']} — AOJ（ブラウザで解く）")
+                continue
+            cur = state.get(e["id"]) or {}
+            hit = cur.get("solved") or excluded(
+                {"id": e["id"], "contest_id": e["contest_id"], "index": e["index"]}, pairs, ids
+            )
+            d = e.get("difficulty")
+            line = (
+                f"- [{'x' if hit else ' '}] **{e['no']}** "
+                f"[{e['contest_id'].upper()} {e['index']} — {e['name']}]({e['url']}) "
+                f"{f'`{d}`' if d is not None else '`—`'}"
+            )
+            if e.get("replaces"):
+                line += f" ← {e['replaces']} の読み替え"
+            out.append(line)
+        out.append("")
+    out += [
+        "---",
+        "",
+        "難易度は AtCoder Problems の推定値。`—` は提出数が足りず推定が出ていないもの",
+        "（JOI 予選や S8PC に多い）。難易度が付いていない＝易しい、ではない。",
+        "",
+    ]
+    open(CHECKLIST, "w", encoding="utf-8").write("\n".join(out))
+
+
 def save_pool(pool, user, lo, hi, solved_count):
     with open(POOL, "w", encoding="utf-8") as f:
         json.dump(
@@ -231,19 +366,13 @@ def save_pool(pool, user, lo, hi, solved_count):
         )
 
 
-def load_pool(lo, hi):
-    """ネットワークが無いときの代替。log.md に出た問題は除く。"""
+def load_pool():
+    """ネットワークが無いときの代替。pool.json をそのまま返す。"""
     if not os.path.exists(POOL):
         return None, None, None
     data = json.load(open(POOL, encoding="utf-8"))
-    seen = logged_problem_ids()
-    pool = [
-        p
-        for p in data["problems"]
-        if lo <= p["difficulty"] <= hi and p["id"] not in seen
-    ]
     age = (datetime.date.today() - datetime.date.fromisoformat(data["built"])).days
-    return pool, age, data.get("solved_count")
+    return data["problems"], age, data.get("solved_count")
 
 
 def main():
@@ -255,11 +384,14 @@ def main():
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--refresh", action="store_true",
                     help="候補プールを再取得して pool.json に保存する（ネットワーク必須）")
+    ap.add_argument("--random", action="store_true",
+                    help="精選100問を使わず、難易度帯からランダムに選ぶ")
     a = ap.parse_args()
     if not a.user:
         sys.exit("ハンドルが不明。.atcoder-user に書くか --user で指定する。")
 
-    shift = recent_log()
+    # 帯の自動調整はランダム出題のためのもの。精選100問は分野順に進むので効かせない。
+    shift = recent_log() if a.random else 0
     lo, hi = a.min + shift, a.max + shift
 
     source, stale = "オンライン", None
@@ -277,36 +409,66 @@ def main():
         if a.refresh:
             sys.exit(f"候補プールを再取得できなかった: {e}")
         # クラウドのサンドボックスなど、外部 API に出られない環境向けの代替。
-        pool, stale, solved_count = load_pool(lo, hi)
+        pool, stale, solved_count = load_pool()
         if pool is None:
             sys.exit(
                 f"ネットワークに出られず ({e})、pool.json も無い。"
                 f"ネットワークのある環境で `bin/pick --refresh` を実行して commit する。"
             )
         source = f"pool.json（{stale} 日前に作成）"
-    if not pool:
-        sys.exit(f"Difficulty {lo}〜{hi} に未 AC の候補が無い。帯を広げる。")
+
+    pairs, ids = logged_problems()
+    senkei, band_pool = split_pool(pool, lo, hi, pairs, ids)
+    if a.refresh:
+        write_checklist(senkei, pairs, ids)
+    todo = [p for p in senkei if not p.get("solved") and not excluded(p, pairs, ids)]
 
     today = datetime.date.today()
-    rng = random.Random(f"{today.isoformat()}:{a.user}")
-    picks = rng.sample(pool, min(a.n, len(pool)))
-    picks.sort(key=lambda p: p["difficulty"])
+    if a.random or not todo:
+        if not band_pool:
+            sys.exit(f"Difficulty {lo}〜{hi} に未 AC の候補が無い。帯を広げる。")
+        rng = random.Random(f"{today.isoformat()}:{a.user}")
+        picks = rng.sample(band_pool, min(a.n, len(band_pool)))
+        picks.sort(key=lambda p: p["difficulty"])
+        target = f"Difficulty {lo}〜{hi}"
+        if shift:
+            target += f"（直近の log.md から {shift:+d} 補正）"
+        target += f" / AC 済み {solved_count} 問を除外 / 候補 {len(band_pool)} 問"
+        if not a.random:
+            target = "精選100問は完了。" + target
+    else:
+        # 分野順に、まだ解いていない先頭から。日付では動かない（解くと進む）。
+        picks = todo[: a.n]
+        # 立ち上がりの数問は Difficulty が極端に低い（数分で終わる）。
+        # 1 日 1 問だと消化に日数を食うだけなので、易しいものはまとめて出す。
+        if a.n == 1:
+            while len(picks) < 3 and len(todo) > len(picks):
+                d = picks[-1].get("difficulty")
+                if d is None or d >= 400:
+                    break
+                picks.append(todo[len(picks)])
+        done = sum(1 for p in senkei if p.get("solved") or excluded(p, pairs, ids))
+        target = (
+            f"精選100問 {done}/{len(senkei)} 完了 — 次は #{picks[0]['senkei']}"
+            f"「{picks[0]['category']}」"
+        )
 
-    band = f"Difficulty {lo}〜{hi}"
-    if shift:
-        band += f"（直近の log.md から {shift:+d} 補正）"
     lines = [
         f"# 今日の 1 問 — {today.isoformat()}",
         "",
-        f"対象: {band} / AC 済み {solved_count} 問を除外 / 候補 {len(pool)} 問 / 出典 {source}",
+        f"対象: {target} / 出典 {source}",
         "",
     ]
     for p in picks:
         url = f"https://atcoder.jp/contests/{p['contest_id']}/tasks/{p['id']}"
+        head = f"## {p['contest_id'].upper()} {p['index']} — {p['name']}"
+        if p.get("senkei"):
+            head += f"  〔精選100問 #{p['senkei']} {p['category']}〕"
+        diff = p.get("difficulty")
         lines += [
-            f"## {p['contest_id'].upper()} {p['index']} — {p['name']}",
+            head,
             "",
-            f"- Difficulty: **{p['difficulty']}**",
+            f"- Difficulty: **{diff if diff is not None else '不明（推定に足る提出数が無い）'}**",
             f"- {url}",
             f"- 環境の用意: `bin/new {p['contest_id']} {p['index'].lower()}`",
             "",
@@ -318,6 +480,13 @@ def main():
             lines += ["**制約**", ""]
             lines += [f"- {c}" for c in brief["constraints"]]
             lines += [""]
+        if not brief.get("statement") and not brief.get("samples"):
+            # 古い JOI などは AtCoder に問題文が無く、PDF へのリンクだけ置いてある。
+            lines += [
+                f"> ⚠ 問題文が AtCoder のページに無い（PDF の場合が多い）。{url} を開くこと。"
+                "サンプルも取れていないので `bin/t` は使えない。",
+                "",
+            ]
         if brief.get("interactive"):
             lines += [
                 "> ⚠ インタラクティブ問題。`#[fastout]` を外すこと（出力がバッファに"
@@ -334,7 +503,8 @@ def main():
         "---",
         "",
         "30 分考えて解けなければヒントを求める（段階制、`CLAUDE.md` 参照）。",
-        "終わったら `log.md` に 1 行残す。",
+        "**終わったら `log.md` に 1 行残す。書かないと明日も同じ問題が出る**"
+        "（解けなかった日も『未AC』で 1 行書けば次に進む）。",
         "",
     ]
     body = "\n".join(lines)

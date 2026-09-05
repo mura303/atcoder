@@ -56,9 +56,16 @@ contests/abc428/
 ```sh
 bin/pick              # 今日の1問を選ぶ（手元でも実行できる）
 bin/pick --n 3        # 3 問出す
-bin/pick --min 600 --max 1200
-bin/pick --refresh    # 候補プール pool.json を作り直す
+bin/pick --random     # 精選100問を使わず、難易度帯からランダムに選ぶ
+bin/pick --min 600 --max 1200   # --random のときの帯
+bin/pick --refresh    # pool.json と SENKEI100.md を作り直す
 ```
+
+出題は**「分野別 初中級者が解くべき過去問精選 100 問」を分野順に進む**のが既定
+（`SENKEI100.md`、出典は `ROADMAP.md` §3）。次の 1 問は「まだ解いていない最小番号」で、
+日付では動かない。**`log.md` に書くか `--refresh` すると次に進む。**
+Difficulty 400 未満の問題は数分で終わるので、まとめて 3 問まで出る。
+100 問を終えると、これまでどおり難易度帯からのランダム出題に自動で切り替わる。
 
 **クラウドのサンドボックスは kenkoooo.com にも atcoder.jp にも出られない**（egress 403）。
 そのため候補は `pool.json` としてリポジトリに置いてあり、routine はそれを読む。

@@ -89,6 +89,9 @@ AtCoder の精進用リポジトリ。目標は**入水（レート 1200）**。
   https://img.atcoder.jp/file/language-update/2025-10/language-list.html で存在を確認してから
 - ACL は `use ac_library::...`（`ac_library_rs` ではない）
 - ローカル判定は `bin/t <contest> <problem>`、問題の追加は `bin/new <contest>`
+- **毎日の 1 問は「精選 100 問」を分野順に進む**（`SENKEI100.md`、`ROADMAP.md` §3）。
+  次の 1 問は「まだ解いていない最小番号」。**`log.md` に 1 行書かないと次に進まない**ので、
+  解けても解けなくても書かせること
 - クラウド（スマホ）のサンドボックスは **atcoder.jp と kenkoooo.com に出られない**が、
   crates.io には出られるので `cargo build` は通る。問題文・制約・サンプルは
   `pool.json` に先読みしてあり、`bin/new <contest> <記号>` がそこから足場を作る

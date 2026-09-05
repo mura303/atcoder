@@ -1,0 +1,1012 @@
+{
+ "source": "https://qiita.com/e869120/items/eb50fdaece12be418faa",
+ "title": "分野別 初中級者が解くべき過去問精選 100 問",
+ "note": "AOJ の 21 問は AtCoder の同等問題に読み替えてある (replaces に元の問題名)。残る 8 問は代替が無いので AOJ のまま。",
+ "problems": [
+  {
+   "no": 1,
+   "category": "全探索：全列挙",
+   "name": "Sum of Three Integers",
+   "url": "https://atcoder.jp/contests/abc051/tasks/abc051_b",
+   "id": "abc051_b",
+   "contest_id": "abc051",
+   "index": "B",
+   "difficulty": 784,
+   "replaces": "ITP1_7_B - How Many Ways?"
+  },
+  {
+   "no": 2,
+   "category": "全探索：全列挙",
+   "name": "105",
+   "url": "https://atcoder.jp/contests/abc106/tasks/abc106_b",
+   "id": "abc106_b",
+   "contest_id": "abc106",
+   "index": "B",
+   "difficulty": -75
+  },
+  {
+   "no": 3,
+   "category": "全探索：全列挙",
+   "name": "ATCoder",
+   "url": "https://atcoder.jp/contests/abc122/tasks/abc122_b",
+   "id": "abc122_b",
+   "contest_id": "abc122",
+   "index": "B",
+   "difficulty": -122
+  },
+  {
+   "no": 4,
+   "category": "全探索：全列挙",
+   "name": "カラオケ",
+   "url": "https://atcoder.jp/contests/pakencamp-2019-day3/tasks/pakencamp_2019_day3_c",
+   "id": "pakencamp_2019_day3_c",
+   "contest_id": "pakencamp-2019-day3",
+   "index": "C",
+   "difficulty": null
+  },
+  {
+   "no": 5,
+   "category": "全探索：工夫して通り数を減らす全列挙",
+   "name": "Half and Half",
+   "url": "https://atcoder.jp/contests/abc095/tasks/arc096_a",
+   "id": "arc096_a",
+   "contest_id": "abc095",
+   "index": "C",
+   "difficulty": 273
+  },
+  {
+   "no": 6,
+   "category": "全探索：工夫して通り数を減らす全列挙",
+   "name": "Lucky PIN",
+   "url": "https://atcoder.jp/contests/sumitrust2019/tasks/sumitb2019_d",
+   "id": "sumitb2019_d",
+   "contest_id": "sumitrust2019",
+   "index": "D",
+   "difficulty": 838
+  },
+  {
+   "no": 7,
+   "category": "全探索：工夫して通り数を減らす全列挙",
+   "name": "最古の遺跡",
+   "url": "https://atcoder.jp/contests/joi2007ho/tasks/joi2007ho_c",
+   "id": "joi2007ho_c",
+   "contest_id": "joi2007ho",
+   "index": "C",
+   "difficulty": null
+  },
+  {
+   "no": 8,
+   "category": "全探索：工夫して通り数を減らす全列挙",
+   "name": "AtCoder Market",
+   "url": "https://atcoder.jp/contests/s8pc-6/tasks/s8pc_6_b",
+   "id": "s8pc_6_b",
+   "contest_id": "s8pc-6",
+   "index": "B",
+   "difficulty": null
+  },
+  {
+   "no": 9,
+   "category": "全探索：工夫して通り数を減らす全列挙",
+   "name": "星座探し",
+   "url": "https://atcoder.jp/contests/joi2008yo/tasks/joi2008yo_d",
+   "id": "joi2008yo_d",
+   "contest_id": "joi2008yo",
+   "index": "D",
+   "difficulty": null
+  },
+  {
+   "no": 10,
+   "category": "全探索：ビット全探索",
+   "name": "Many Formulas",
+   "url": "https://atcoder.jp/contests/abc045/tasks/arc061_a",
+   "id": "arc061_a",
+   "contest_id": "abc045",
+   "index": "C",
+   "difficulty": 1089,
+   "replaces": "ALDS_5_A - 総当たり"
+  },
+  {
+   "no": 11,
+   "category": "全探索：ビット全探索",
+   "name": "Switches",
+   "url": "https://atcoder.jp/contests/abc128/tasks/abc128_c",
+   "id": "abc128_c",
+   "contest_id": "abc128",
+   "index": "C",
+   "difficulty": 805
+  },
+  {
+   "no": 12,
+   "category": "全探索：ビット全探索",
+   "name": "派閥",
+   "url": "https://atcoder.jp/contests/abc002/tasks/abc002_4",
+   "id": "abc002_4",
+   "contest_id": "abc002",
+   "index": "D",
+   "difficulty": 1418
+  },
+  {
+   "no": 13,
+   "category": "全探索：ビット全探索",
+   "name": "おせんべい",
+   "url": "https://atcoder.jp/contests/joi2008yo/tasks/joi2008yo_e",
+   "id": "joi2008yo_e",
+   "contest_id": "joi2008yo",
+   "index": "E",
+   "difficulty": null
+  },
+  {
+   "no": 14,
+   "category": "全探索：ビット全探索",
+   "name": "Buildings are Colorful!",
+   "url": "https://atcoder.jp/contests/s8pc-4/tasks/s8pc_4_b",
+   "id": "s8pc_4_b",
+   "contest_id": "s8pc-4",
+   "index": "B",
+   "difficulty": null
+  },
+  {
+   "no": 15,
+   "category": "全探索：順列全探索",
+   "name": "Average Length",
+   "url": "https://atcoder.jp/contests/abc145/tasks/abc145_c",
+   "id": "abc145_c",
+   "contest_id": "abc145",
+   "index": "C",
+   "difficulty": 335
+  },
+  {
+   "no": 16,
+   "category": "全探索：順列全探索",
+   "name": "Count Order",
+   "url": "https://atcoder.jp/contests/abc150/tasks/abc150_c",
+   "id": "abc150_c",
+   "contest_id": "abc150",
+   "index": "C",
+   "difficulty": 422
+  },
+  {
+   "no": 17,
+   "category": "全探索：順列全探索",
+   "name": "One-stroke Path",
+   "url": "https://atcoder.jp/contests/abc054/tasks/abc054_c",
+   "id": "abc054_c",
+   "contest_id": "abc054",
+   "index": "C",
+   "difficulty": 1244,
+   "replaces": "ALDS_13_A - 8 クイーン問題"
+  },
+  {
+   "no": 18,
+   "category": "二分探索",
+   "name": "Triangles",
+   "url": "https://atcoder.jp/contests/abc143/tasks/abc143_d",
+   "id": "abc143_d",
+   "contest_id": "abc143",
+   "index": "D",
+   "difficulty": 686,
+   "replaces": "ALDS_4_B - 二分探索"
+  },
+  {
+   "no": 19,
+   "category": "二分探索",
+   "name": "ピザ",
+   "url": "https://atcoder.jp/contests/joi2009ho/tasks/joi2009ho_b",
+   "id": "joi2009ho_b",
+   "contest_id": "joi2009ho",
+   "index": "B",
+   "difficulty": null
+  },
+  {
+   "no": 20,
+   "category": "二分探索",
+   "name": "Snuke Festival",
+   "url": "https://atcoder.jp/contests/abc077/tasks/arc084_a",
+   "id": "arc084_a",
+   "contest_id": "abc077",
+   "index": "C",
+   "difficulty": 1096
+  },
+  {
+   "no": 21,
+   "category": "二分探索",
+   "name": "射撃王",
+   "url": "https://atcoder.jp/contests/abc023/tasks/abc023_d",
+   "id": "abc023_d",
+   "contest_id": "abc023",
+   "index": "D",
+   "difficulty": 1843
+  },
+  {
+   "no": 22,
+   "category": "二分探索",
+   "name": "ムーアの法則",
+   "url": "https://atcoder.jp/contests/arc054/tasks/arc054_b",
+   "id": "arc054_b",
+   "contest_id": "arc054",
+   "index": "B",
+   "difficulty": 1269
+  },
+  {
+   "no": 23,
+   "category": "二分探索",
+   "name": "ダーツ",
+   "url": "https://atcoder.jp/contests/joi2008ho/tasks/joi2008ho_c",
+   "id": "joi2008ho_c",
+   "contest_id": "joi2008ho",
+   "index": "C",
+   "difficulty": null
+  },
+  {
+   "no": 24,
+   "category": "深さ優先探索",
+   "name": "深さ優先探索",
+   "url": "https://atcoder.jp/contests/atc001/tasks/dfs_a",
+   "id": "dfs_a",
+   "contest_id": "atc001",
+   "index": "A",
+   "difficulty": null,
+   "replaces": "ALDS_11_B - 深さ優先探索"
+  },
+  {
+   "no": 25,
+   "category": "深さ優先探索",
+   "name": "Count Connected Components",
+   "url": "https://atcoder.jp/contests/abc284/tasks/abc284_c",
+   "id": "abc284_c",
+   "contest_id": "abc284",
+   "index": "C",
+   "difficulty": 108,
+   "replaces": "AOJ 1160 - 島はいくつある？"
+  },
+  {
+   "no": 26,
+   "category": "深さ優先探索",
+   "name": "Ki",
+   "url": "https://atcoder.jp/contests/abc138/tasks/abc138_d",
+   "id": "abc138_d",
+   "contest_id": "abc138",
+   "index": "D",
+   "difficulty": 920
+  },
+  {
+   "no": 27,
+   "category": "深さ優先探索",
+   "name": "薄氷渡り",
+   "url": "https://atcoder.jp/contests/joi2009yo/tasks/joi2009yo_d",
+   "id": "joi2009yo_d",
+   "contest_id": "joi2009yo",
+   "index": "D",
+   "difficulty": null
+  },
+  {
+   "no": 28,
+   "category": "幅優先探索",
+   "name": ".. (Double Dots)",
+   "url": "https://atcoder.jp/contests/abc168/tasks/abc168_d",
+   "id": "abc168_d",
+   "contest_id": "abc168",
+   "index": "D",
+   "difficulty": 804,
+   "replaces": "ALDS_11_C - 幅優先探索"
+  },
+  {
+   "no": 29,
+   "category": "幅優先探索",
+   "name": "幅優先探索",
+   "url": "https://atcoder.jp/contests/abc007/tasks/abc007_3",
+   "id": "abc007_3",
+   "contest_id": "abc007",
+   "index": "3",
+   "difficulty": 1024
+  },
+  {
+   "no": 30,
+   "category": "幅優先探索",
+   "name": "チーズ (Cheese)",
+   "url": "https://atcoder.jp/contests/joi2011yo/tasks/joi2011yo_e",
+   "id": "joi2011yo_e",
+   "contest_id": "joi2011yo",
+   "index": "E",
+   "difficulty": null
+  },
+  {
+   "no": 31,
+   "category": "幅優先探索",
+   "name": "イルミネーション (Illumination)",
+   "url": "https://atcoder.jp/contests/joi2012yo/tasks/joi2012yo_e",
+   "id": "joi2012yo_e",
+   "contest_id": "joi2012yo",
+   "index": "E",
+   "difficulty": null
+  },
+  {
+   "no": 32,
+   "category": "幅優先探索",
+   "name": "AOJ 1166 - 迷図と命ず",
+   "url": "http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=1166&lang=jp",
+   "id": null,
+   "aoj": true
+  },
+  {
+   "no": 33,
+   "category": "幅優先探索",
+   "name": "Grid Repainting",
+   "url": "https://atcoder.jp/contests/abc088/tasks/abc088_d",
+   "id": "abc088_d",
+   "contest_id": "abc088",
+   "index": "D",
+   "difficulty": 999
+  },
+  {
+   "no": 34,
+   "category": "動的計画法：ナップザック DP",
+   "name": "Frog 1",
+   "url": "https://atcoder.jp/contests/dp/tasks/dp_a",
+   "id": "dp_a",
+   "contest_id": "dp",
+   "index": "A",
+   "difficulty": null,
+   "replaces": "ALDS_10_A - フィボナッチ数"
+  },
+  {
+   "no": 35,
+   "category": "動的計画法：ナップザック DP",
+   "name": "Knapsack 1",
+   "url": "https://atcoder.jp/contests/dp/tasks/dp_d",
+   "id": "dp_d",
+   "contest_id": "dp",
+   "index": "D",
+   "difficulty": null,
+   "replaces": "DPL_1_B - 0,1ナップザック問題"
+  },
+  {
+   "no": 36,
+   "category": "動的計画法：ナップザック DP",
+   "name": "Crested Ibis vs Monster",
+   "url": "https://atcoder.jp/contests/abc153/tasks/abc153_e",
+   "id": "abc153_e",
+   "contest_id": "abc153",
+   "index": "E",
+   "difficulty": 1015,
+   "replaces": "DPL_1_C - ナップザック問題"
+  },
+  {
+   "no": 37,
+   "category": "動的計画法：ナップザック DP",
+   "name": "Strange Bank",
+   "url": "https://atcoder.jp/contests/abc099/tasks/abc099_c",
+   "id": "abc099_c",
+   "contest_id": "abc099",
+   "index": "C",
+   "difficulty": 1101,
+   "replaces": "DPL_1_A - コイン問題"
+  },
+  {
+   "no": 38,
+   "category": "動的計画法：ナップザック DP",
+   "name": "LCS",
+   "url": "https://atcoder.jp/contests/dp/tasks/dp_f",
+   "id": "dp_f",
+   "contest_id": "dp",
+   "index": "F",
+   "difficulty": null,
+   "replaces": "ALDS_10_C - 最長共通部分列"
+  },
+  {
+   "no": 39,
+   "category": "動的計画法：ナップザック DP",
+   "name": "1 年生 (A First Grader)",
+   "url": "https://atcoder.jp/contests/joi2011yo/tasks/joi2011yo_d",
+   "id": "joi2011yo_d",
+   "contest_id": "joi2011yo",
+   "index": "D",
+   "difficulty": null
+  },
+  {
+   "no": 40,
+   "category": "動的計画法：ナップザック DP",
+   "name": "パスタ (Pasta)",
+   "url": "https://atcoder.jp/contests/joi2012yo/tasks/joi2012yo_d",
+   "id": "joi2012yo_d",
+   "contest_id": "joi2012yo",
+   "index": "D",
+   "difficulty": null
+  },
+  {
+   "no": 41,
+   "category": "動的計画法：ナップザック DP",
+   "name": "暑い日々 (Hot days)",
+   "url": "https://atcoder.jp/contests/joi2013yo/tasks/joi2013yo_d",
+   "id": "joi2013yo_d",
+   "contest_id": "joi2013yo",
+   "index": "D",
+   "difficulty": null
+  },
+  {
+   "no": 42,
+   "category": "動的計画法：ナップザック DP",
+   "name": "シルクロード (Silk Road)",
+   "url": "https://atcoder.jp/contests/joi2015yo/tasks/joi2015yo_d",
+   "id": "joi2015yo_d",
+   "contest_id": "joi2015yo",
+   "index": "D",
+   "difficulty": null
+  },
+  {
+   "no": 43,
+   "category": "動的計画法：ナップザック DP",
+   "name": "パ研軍旗",
+   "url": "https://atcoder.jp/contests/pakencamp-2019-day3/tasks/pakencamp_2019_day3_d",
+   "id": "pakencamp_2019_day3_d",
+   "contest_id": "pakencamp-2019-day3",
+   "index": "D",
+   "difficulty": null
+  },
+  {
+   "no": 44,
+   "category": "動的計画法：ナップザック DP",
+   "name": "AOJ 1167 - ポロック予想",
+   "url": "http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=1167&lang=jp",
+   "id": null,
+   "aoj": true
+  },
+  {
+   "no": 45,
+   "category": "動的計画法：ナップザック DP",
+   "name": "AOJ 2199 - 差分パルス符号変調",
+   "url": "http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=2199&lang=jp",
+   "id": null,
+   "aoj": true
+  },
+  {
+   "no": 46,
+   "category": "動的計画法：区間 DP",
+   "name": "Slimes",
+   "url": "https://atcoder.jp/contests/dp/tasks/dp_n",
+   "id": "dp_n",
+   "contest_id": "dp",
+   "index": "N",
+   "difficulty": null,
+   "replaces": "ALDS_10_B - 連鎖行列積"
+  },
+  {
+   "no": 47,
+   "category": "動的計画法：区間 DP",
+   "name": "ケーキの切り分け２ (Cake 2)",
+   "url": "https://atcoder.jp/contests/joi2015ho/tasks/joi2015ho_b",
+   "id": "joi2015ho_b",
+   "contest_id": "joi2015ho",
+   "index": "B",
+   "difficulty": null
+  },
+  {
+   "no": 48,
+   "category": "動的計画法：区間 DP",
+   "name": "AOJ 1611 ダルマ落とし",
+   "url": "http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=1611&lang=jp",
+   "id": null,
+   "aoj": true
+  },
+  {
+   "no": 49,
+   "category": "動的計画法：bit DP",
+   "name": "Traveling Salesman among Aerial Cities",
+   "url": "https://atcoder.jp/contests/abc180/tasks/abc180_e",
+   "id": "abc180_e",
+   "contest_id": "abc180",
+   "index": "E",
+   "difficulty": 1256,
+   "replaces": "DPL_2_A - 巡回セールスマン問題"
+  },
+  {
+   "no": 50,
+   "category": "動的計画法：bit DP",
+   "name": "Revenge of Traveling Salesman Problem",
+   "url": "https://atcoder.jp/contests/s8pc-1/tasks/s8pc_1_g",
+   "id": "s8pc_1_g",
+   "contest_id": "s8pc-1",
+   "index": "G",
+   "difficulty": null
+  },
+  {
+   "no": 51,
+   "category": "動的計画法：bit DP",
+   "name": "部活のスケジュール表 (Schedule)",
+   "url": "https://atcoder.jp/contests/joi2014yo/tasks/joi2014yo_d",
+   "id": "joi2014yo_d",
+   "contest_id": "joi2014yo",
+   "index": "D",
+   "difficulty": null
+  },
+  {
+   "no": 52,
+   "category": "動的計画法：bit DP",
+   "name": "ぬいぐるみの整理 (Plush Toys) ",
+   "url": "https://atcoder.jp/contests/joi2017yo/tasks/joi2017yo_d",
+   "id": "joi2017yo_d",
+   "contest_id": "joi2017yo",
+   "index": "D",
+   "difficulty": null
+  },
+  {
+   "no": 53,
+   "category": "動的計画法：その他",
+   "name": "DPL_1_D - 最長増加部分列",
+   "url": "http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DPL_1_D&lang=ja",
+   "id": null,
+   "aoj": true
+  },
+  {
+   "no": 54,
+   "category": "動的計画法：その他",
+   "name": "トランプ挿入ソート",
+   "url": "https://atcoder.jp/contests/abc006/tasks/abc006_4",
+   "id": "abc006_4",
+   "contest_id": "abc006",
+   "index": "D",
+   "difficulty": 1696
+  },
+  {
+   "no": 55,
+   "category": "動的計画法：その他",
+   "name": "Sequence Decomposing",
+   "url": "https://atcoder.jp/contests/abc134/tasks/abc134_e",
+   "id": "abc134_e",
+   "contest_id": "abc134",
+   "index": "E",
+   "difficulty": 1320
+  },
+  {
+   "no": 56,
+   "category": "最短経路問題：ダイクストラ法",
+   "name": "Super Takahashi Bros.",
+   "url": "https://atcoder.jp/contests/abc340/tasks/abc340_d",
+   "id": "abc340_d",
+   "contest_id": "abc340",
+   "index": "D",
+   "difficulty": 784,
+   "replaces": "GRL_1_A - 単一始点最短経路"
+  },
+  {
+   "no": 57,
+   "category": "最短経路問題：ダイクストラ法",
+   "name": "船旅",
+   "url": "https://atcoder.jp/contests/joi2008yo/tasks/joi2008yo_f",
+   "id": "joi2008yo_f",
+   "contest_id": "joi2008yo",
+   "index": "F",
+   "difficulty": null
+  },
+  {
+   "no": 58,
+   "category": "最短経路問題：ダイクストラ法",
+   "name": "ゾンビ島 (Zombie Island)",
+   "url": "https://atcoder.jp/contests/joi2016yo/tasks/joi2016yo_e",
+   "id": "joi2016yo_e",
+   "contest_id": "joi2016yo",
+   "index": "E",
+   "difficulty": null
+  },
+  {
+   "no": 59,
+   "category": "最短経路問題：ダイクストラ法",
+   "name": "タクシー (Taxis)",
+   "url": "https://atcoder.jp/contests/joi2014yo/tasks/joi2014yo_e",
+   "id": "joi2014yo_e",
+   "contest_id": "joi2014yo",
+   "index": "E",
+   "difficulty": null
+  },
+  {
+   "no": 60,
+   "category": "最短経路問題：ワーシャルフロイド法",
+   "name": "joisino's travel",
+   "url": "https://atcoder.jp/contests/abc073/tasks/abc073_d",
+   "id": "abc073_d",
+   "contest_id": "abc073",
+   "index": "D",
+   "difficulty": 1345,
+   "replaces": "GRL_1_C - 全点対間最短経路"
+  },
+  {
+   "no": 61,
+   "category": "最短経路問題：ワーシャルフロイド法",
+   "name": "バスと避けられない運命",
+   "url": "https://atcoder.jp/contests/abc012/tasks/abc012_4",
+   "id": "abc012_4",
+   "contest_id": "abc012",
+   "index": "D",
+   "difficulty": 1166
+  },
+  {
+   "no": 62,
+   "category": "最短経路問題：ワーシャルフロイド法",
+   "name": "Wall",
+   "url": "https://atcoder.jp/contests/abc079/tasks/abc079_d",
+   "id": "abc079_d",
+   "contest_id": "abc079",
+   "index": "D",
+   "difficulty": 949
+  },
+  {
+   "no": 63,
+   "category": "最短経路問題：ワーシャルフロイド法",
+   "name": "Restoring Road Network",
+   "url": "https://atcoder.jp/contests/abc074/tasks/arc083_b",
+   "id": "arc083_b",
+   "contest_id": "abc074",
+   "index": "D",
+   "difficulty": 1563
+  },
+  {
+   "no": 64,
+   "category": "最小全域木問題",
+   "name": "Destruction",
+   "url": "https://atcoder.jp/contests/abc218/tasks/abc218_e",
+   "id": "abc218_e",
+   "contest_id": "abc218",
+   "index": "E",
+   "difficulty": 1004,
+   "replaces": "GRL_2_A - 最小全域木"
+  },
+  {
+   "no": 65,
+   "category": "最小全域木問題",
+   "name": "本選会場 (Finals)",
+   "url": "https://atcoder.jp/contests/joisc2010/tasks/joisc2010_finals",
+   "id": "joisc2010_finals",
+   "contest_id": "joisc2010",
+   "index": "finals",
+   "difficulty": null
+  },
+  {
+   "no": 66,
+   "category": "最小全域木問題",
+   "name": "AOJ 1127 - Building a Space Station",
+   "url": "http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=1127",
+   "id": null,
+   "aoj": true
+  },
+  {
+   "no": 67,
+   "category": "最小全域木問題",
+   "name": "Built?",
+   "url": "https://atcoder.jp/contests/abc065/tasks/arc076_b",
+   "id": "arc076_b",
+   "contest_id": "abc065",
+   "index": "D",
+   "difficulty": 1615
+  },
+  {
+   "no": 68,
+   "category": "高速な素数判定法",
+   "name": "Disjoint Set of Common Divisors",
+   "url": "https://atcoder.jp/contests/abc142/tasks/abc142_d",
+   "id": "abc142_d",
+   "contest_id": "abc142",
+   "index": "D",
+   "difficulty": 827,
+   "replaces": "NTL_1_A - 素因数分解"
+  },
+  {
+   "no": 69,
+   "category": "高速な素数判定法",
+   "name": "2017-like Number",
+   "url": "https://atcoder.jp/contests/abc084/tasks/abc084_d",
+   "id": "abc084_d",
+   "contest_id": "abc084",
+   "index": "D",
+   "difficulty": 980
+  },
+  {
+   "no": 70,
+   "category": "高速なべき乗計算",
+   "name": "Bouquet",
+   "url": "https://atcoder.jp/contests/abc156/tasks/abc156_d",
+   "id": "abc156_d",
+   "contest_id": "abc156",
+   "index": "D",
+   "difficulty": 1014,
+   "replaces": "NTL_1_B - べき乗"
+  },
+  {
+   "no": 71,
+   "category": "高速なべき乗計算",
+   "name": "散歩 (E869120 and Path Length)",
+   "url": "https://atcoder.jp/contests/s8pc-1/tasks/s8pc_1_e",
+   "id": "s8pc_1_e",
+   "contest_id": "s8pc-1",
+   "index": "E",
+   "difficulty": null
+  },
+  {
+   "no": 72,
+   "category": "逆元を使う問題",
+   "name": "経路",
+   "url": "https://atcoder.jp/contests/abc034/tasks/abc034_c",
+   "id": "abc034_c",
+   "contest_id": "abc034",
+   "index": "C",
+   "difficulty": 1440
+  },
+  {
+   "no": 73,
+   "category": "逆元を使う問題",
+   "name": "Knight",
+   "url": "https://atcoder.jp/contests/abc145/tasks/abc145_d",
+   "id": "abc145_d",
+   "contest_id": "abc145",
+   "index": "D",
+   "difficulty": 1009
+  },
+  {
+   "no": 74,
+   "category": "逆元を使う問題",
+   "name": "多重ループ",
+   "url": "https://atcoder.jp/contests/abc021/tasks/abc021_d",
+   "id": "abc021_d",
+   "contest_id": "abc021",
+   "index": "D",
+   "difficulty": 1704
+  },
+  {
+   "no": 75,
+   "category": "逆元を使う問題",
+   "name": "Surrounded Nodes",
+   "url": "https://atcoder.jp/contests/abc149/tasks/abc149_f",
+   "id": "abc149_f",
+   "contest_id": "abc149",
+   "index": "F",
+   "difficulty": 2208
+  },
+  {
+   "no": 76,
+   "category": "累積和",
+   "name": "Abundant Resources",
+   "url": "https://atcoder.jp/contests/nikkei2019-final/tasks/nikkei2019_final_a",
+   "id": "nikkei2019_final_a",
+   "contest_id": "nikkei2019-final",
+   "index": "A",
+   "difficulty": null
+  },
+  {
+   "no": 77,
+   "category": "累積和",
+   "name": "旅人",
+   "url": "https://atcoder.jp/contests/joi2010ho/tasks/joi2010ho_a",
+   "id": "joi2010ho_a",
+   "contest_id": "joi2010ho",
+   "index": "A",
+   "difficulty": null
+  },
+  {
+   "no": 78,
+   "category": "累積和",
+   "name": "惑星探査 (Planetary Exploration)",
+   "url": "https://atcoder.jp/contests/joi2011ho/tasks/joi2011ho1",
+   "id": "joi2011ho1",
+   "contest_id": "joi2011ho",
+   "index": "A",
+   "difficulty": null
+  },
+  {
+   "no": 79,
+   "category": "累積和",
+   "name": "AtCoder Express 2",
+   "url": "https://atcoder.jp/contests/abc106/tasks/abc106_d",
+   "id": "abc106_d",
+   "contest_id": "abc106",
+   "index": "D",
+   "difficulty": 1319
+  },
+  {
+   "no": 80,
+   "category": "累積和",
+   "name": "家の建設",
+   "url": "https://atcoder.jp/contests/gigacode-2019/tasks/gigacode_2019_d",
+   "id": "gigacode_2019_d",
+   "contest_id": "gigacode-2019",
+   "index": "D",
+   "difficulty": null
+  },
+  {
+   "no": 81,
+   "category": "累積和",
+   "name": "AtColor",
+   "url": "https://atcoder.jp/contests/abc014/tasks/abc014_3",
+   "id": "abc014_3",
+   "contest_id": "abc014",
+   "index": "C",
+   "difficulty": 1276
+  },
+  {
+   "no": 82,
+   "category": "累積和",
+   "name": "Water Heater",
+   "url": "https://atcoder.jp/contests/abc183/tasks/abc183_d",
+   "id": "abc183_d",
+   "contest_id": "abc183",
+   "index": "D",
+   "difficulty": 662,
+   "replaces": "AOJ 2013 - 大崎"
+  },
+  {
+   "no": 83,
+   "category": "累積和",
+   "name": "鉄道旅行 (Railroad Trip)",
+   "url": "https://atcoder.jp/contests/joi2015ho/tasks/joi2015ho_a",
+   "id": "joi2015ho_a",
+   "contest_id": "joi2015ho",
+   "index": "A",
+   "difficulty": null
+  },
+  {
+   "no": 84,
+   "category": "累積和",
+   "name": "釘 (Nails)",
+   "url": "https://atcoder.jp/contests/joi2012ho/tasks/joi2012ho4",
+   "id": "joi2012ho4",
+   "contest_id": "joi2012ho",
+   "index": "D",
+   "difficulty": null
+  },
+  {
+   "no": 85,
+   "category": "Union-Find",
+   "name": "Union Find",
+   "url": "https://atcoder.jp/contests/atc001/tasks/unionfind_a",
+   "id": "unionfind_a",
+   "contest_id": "atc001",
+   "index": "B",
+   "difficulty": null,
+   "replaces": "DSL_1_A - 互いに素な集合"
+  },
+  {
+   "no": 86,
+   "category": "Union-Find",
+   "name": "Bridge",
+   "url": "https://atcoder.jp/contests/abc075/tasks/abc075_c?lang=ja",
+   "id": "abc075_c",
+   "contest_id": "abc075",
+   "index": "C",
+   "difficulty": 1067
+  },
+  {
+   "no": 87,
+   "category": "Union-Find",
+   "name": "Decayed Bridges",
+   "url": "https://atcoder.jp/contests/abc120/tasks/abc120_d",
+   "id": "abc120_d",
+   "contest_id": "abc120",
+   "index": "D",
+   "difficulty": 1355
+  },
+  {
+   "no": 88,
+   "category": "その他のテクニック",
+   "name": "碁石ならべ",
+   "url": "https://atcoder.jp/contests/joi2008ho/tasks/joi2008ho_a",
+   "id": "joi2008ho_a",
+   "contest_id": "joi2008ho",
+   "index": "A",
+   "difficulty": null
+  },
+  {
+   "no": 89,
+   "category": "その他のテクニック",
+   "name": "電飾 (Illumination)",
+   "url": "https://atcoder.jp/contests/joi2013ho/tasks/joi2013ho1",
+   "id": "joi2013ho1",
+   "contest_id": "joi2013ho",
+   "index": "1",
+   "difficulty": null
+  },
+  {
+   "no": 90,
+   "category": "その他のテクニック",
+   "name": "Emblem",
+   "url": "https://atcoder.jp/contests/s8pc-5/tasks/s8pc_5_b",
+   "id": "s8pc_5_b",
+   "contest_id": "s8pc-5",
+   "index": "B",
+   "difficulty": null
+  },
+  {
+   "no": 91,
+   "category": "その他のテクニック",
+   "name": "Water Bottle",
+   "url": "https://atcoder.jp/contests/abc144/tasks/abc144_d",
+   "id": "abc144_d",
+   "contest_id": "abc144",
+   "index": "D",
+   "difficulty": 714
+  },
+  {
+   "no": 92,
+   "category": "実装問題",
+   "name": "AOJ 1193 - 連鎖消滅パズル",
+   "url": "http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=1193&lang=jp",
+   "id": null,
+   "aoj": true
+  },
+  {
+   "no": 93,
+   "category": "実装問題",
+   "name": "Falling Stone Game",
+   "url": "https://atcoder.jp/contests/s8pc-3/tasks/s8pc_3_b",
+   "id": "s8pc_3_b",
+   "contest_id": "s8pc-3",
+   "index": "B",
+   "difficulty": null
+  },
+  {
+   "no": 94,
+   "category": "実装問題",
+   "name": "AOJ 1149 - ケーキカット",
+   "url": "http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=1149&lang=jp",
+   "id": null,
+   "aoj": true
+  },
+  {
+   "no": 95,
+   "category": "数学的な問題",
+   "name": "Greedy Takahashi",
+   "url": "https://atcoder.jp/contests/abc149/tasks/abc149_b",
+   "id": "abc149_b",
+   "contest_id": "abc149",
+   "index": "B",
+   "difficulty": null
+  },
+  {
+   "no": 96,
+   "category": "数学的な問題",
+   "name": "ModSum",
+   "url": "https://atcoder.jp/contests/abc139/tasks/abc139_d",
+   "id": "abc139_d",
+   "contest_id": "abc139",
+   "index": "D",
+   "difficulty": 354
+  },
+  {
+   "no": 97,
+   "category": "数学的な問題",
+   "name": "Semi Common Multiple",
+   "url": "https://atcoder.jp/contests/abc150/tasks/abc150_d",
+   "id": "abc150_d",
+   "contest_id": "abc150",
+   "index": "D",
+   "difficulty": 1534
+  },
+  {
+   "no": 98,
+   "category": "数学的な問題",
+   "name": "Colorful Hats 2",
+   "url": "https://atcoder.jp/contests/sumitrust2019/tasks/sumitb2019_e",
+   "id": "sumitb2019_e",
+   "contest_id": "sumitrust2019",
+   "index": "E",
+   "difficulty": 1176
+  },
+  {
+   "no": 99,
+   "category": "数学的な問題",
+   "name": "Digit Sum Replace",
+   "url": "https://atcoder.jp/contests/ddcc2020-qual/tasks/ddcc2020_qual_d",
+   "id": "ddcc2020_qual_d",
+   "contest_id": "ddcc2020-qual",
+   "index": "D",
+   "difficulty": 1617
+  },
+  {
+   "no": 100,
+   "category": "数学的な問題",
+   "name": "Crossing",
+   "url": "https://atcoder.jp/contests/tenka1-2018-beginner/tasks/tenka1_2018_d",
+   "id": "tenka1_2018_d",
+   "contest_id": "tenka1-2018-beginner",
+   "index": "D",
+   "difficulty": 1351
+  }
+ ]
+}

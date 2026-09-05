@@ -61,7 +61,10 @@ def fetch_samples(url):
                 "\r\n", "\n"
             )
             for m in re.finditer(
-                rf"<h3>{kind}例\s*(\d+)</h3>\s*<pre[^>]*>(.*?)</pre>", body, re.S
+                # 古いコンテストは <h3> と <pre> の間に <section> が挟まる
+                rf"<h3[^>]*>\s*{kind}例\s*(\d+)\s*</h3>(?:(?!<h3).)*?<pre[^>]*>(.*?)</pre>",
+                body,
+                re.S,
             )
         }
 
