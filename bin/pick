@@ -58,12 +58,32 @@ def solved_problems(user):
     return solved
 
 
+LOG = os.path.join(ROOT, "log.md")
+RESULTS = ("自力AC", "解説AC", "未AC")
+PLACEHOLDER = "未記入"
+
+
+def log_rows():
+    """log.md の記録行を [(行, コンテスト, 記号, 結果が入っているか)] で返す。
+
+    出題した時点で「未記入」の行を先に置くので、**結果が入るまでは消化扱いにしない**。
+    そうしないと、出題したその瞬間に次のまとまりへ進んでしまう。
+    """
+    if not os.path.exists(LOG):
+        return []
+    out = []
+    for line in open(LOG, encoding="utf-8").read().split("\n"):
+        m = re.match(r"^\d{4}-\d{2}-\d{2}\s+(\S+)\s+(\S+)", line)
+        if not m:
+            continue
+        out.append((line, m.group(1).lower(), m.group(2).lower(),
+                    any(r in line for r in RESULTS)))
+    return out
+
+
 def recent_log():
     """log.md の直近 10 行から、帯を上げるか下げるかを決める。"""
-    path = os.path.join(ROOT, "log.md")
-    if not os.path.exists(path):
-        return 0
-    rows = [l for l in open(path, encoding="utf-8").read().split("\n") if re.match(r"^\d{4}-\d{2}-\d{2}", l)]
+    rows = [r[0] for r in log_rows() if r[3]]
     rows = rows[-10:]
     if len(rows) < 5:
         return 0
@@ -155,19 +175,41 @@ def fetch_brief(url):
 
 
 def logged_problems():
-    """log.md に出てくる問題を、次の出題から除く。
+    """結果まで書かれた問題を、次の出題から除く。
 
-    書式は `2026-09-05 ABC199 C 解説AC ...` なので (コンテスト, 記号) の組で拾う。
+    書式は `2026-09-05 ABC199 C — IPFL 解説AC ...` なので (コンテスト, 記号) で拾う。
     問題 ID が直接書かれていることもあるので、そちらも拾う。
+    「未記入」の行はまだ消化していないので除外しない。
     戻り値は (組の集合, ID の集合)。
     """
-    path = os.path.join(ROOT, "log.md")
-    if not os.path.exists(path):
-        return set(), set()
-    text = open(path, encoding="utf-8").read().lower()
-    pairs = set(re.findall(r"^\d{4}-\d{2}-\d{2}\s+(\S+)\s+(\S+)", text, re.M))
-    ids = set(re.findall(r"[a-z0-9]+_[a-z0-9]+", text))
+    done = [r for r in log_rows() if r[3]]
+    pairs = {(c, i) for _, c, i, _ in done}
+    ids = set()
+    for line, _, _, _ in done:
+        ids |= set(re.findall(r"[a-z0-9]+_[a-z0-9]+", line.lower()))
     return pairs, ids
+
+
+def append_placeholders(picks):
+    """出題した問題を log.md に「未記入」で先に置く。
+
+    スマホから打つ量を減らすのが目的。結果と一行メモだけ後から埋めればよくなる。
+    すでに行がある問題は触らない（何度出題しても増えない）。
+    """
+    known = {(c, i) for _, c, i, _ in log_rows()}
+    today = datetime.date.today().isoformat()
+    add = [
+        f"{today} {p['contest_id'].upper()} {p['index']} — {p['name']}  {PLACEHOLDER}"
+        for p in picks
+        if (p["contest_id"].lower(), str(p["index"]).lower()) not in known
+    ]
+    if not add:
+        return []
+    text = open(LOG, encoding="utf-8").read() if os.path.exists(LOG) else ""
+    if text and not text.endswith("\n"):
+        text += "\n"
+    open(LOG, "w", encoding="utf-8").write(text + "\n".join(add) + "\n")
+    return add
 
 
 def excluded(p, pairs, ids):
@@ -533,6 +575,8 @@ def main():
     if not a.dry_run:
         with open(os.path.join(ROOT, "today.md"), "w", encoding="utf-8") as f:
             f.write(body)
+        for line in append_placeholders(picks):
+            print(f"log.md に追記: {line}", file=sys.stderr)
 
 
 if __name__ == "__main__":
