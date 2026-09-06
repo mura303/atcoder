@@ -263,6 +263,26 @@ def build_pool(user, lo, hi, briefs=False, cache=None):
     return pool, len(solved)
 
 
+def current_batch(order, size, refill):
+    """今回出す「まとまり」を決める。
+
+    size 問を出して、そのうち refill 問が log.md に書かれたら次のまとまりに移る。
+    書き終わっていないものは捨てずに次のまとまりの先頭に持ち越す。
+    状態はどこにも持たない。log.md と AC 履歴だけから毎回同じ答えが出る。
+    """
+    batch = []
+    for p in order:
+        if len(batch) < size:
+            batch.append(p)
+            continue
+        if sum(1 for x in batch if x.get("done")) >= refill:
+            batch = [x for x in batch if not x.get("done")]
+            batch.append(p)
+        else:
+            break
+    return batch
+
+
 def split_pool(pool, lo, hi, pairs, ids):
     """(精選100問の並び, 難易度帯のランダム候補) に分ける。"""
     senkei = sorted((p for p in pool if p.get("senkei")), key=lambda p: p["senkei"])
@@ -380,7 +400,10 @@ def main():
     ap.add_argument("--user", default=os.environ.get("ATCODER_USER") or handle_from_file())
     ap.add_argument("--min", type=int, default=400)
     ap.add_argument("--max", type=int, default=1000)
-    ap.add_argument("--n", type=int, default=1)
+    ap.add_argument("--n", type=int, default=3,
+                    help="1 度に出す問題数（既定 3）")
+    ap.add_argument("--refill", type=int, default=2,
+                    help="このうち何問を log.md に書いたら次のまとまりに移るか（既定 2）")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--refresh", action="store_true",
                     help="候補プールを再取得して pool.json に保存する（ネットワーク必須）")
@@ -421,7 +444,9 @@ def main():
     senkei, band_pool = split_pool(pool, lo, hi, pairs, ids)
     if a.refresh:
         write_checklist(senkei, pairs, ids)
-    todo = [p for p in senkei if not p.get("solved") and not excluded(p, pairs, ids)]
+    for p in senkei:
+        p["done"] = bool(p.get("solved")) or excluded(p, pairs, ids)
+    todo = [p for p in senkei if not p["done"]]
 
     today = datetime.date.today()
     if a.random or not todo:
@@ -438,20 +463,16 @@ def main():
             target = "精選100問は完了。" + target
     else:
         # 分野順に、まだ解いていない先頭から。日付では動かない（解くと進む）。
-        picks = todo[: a.n]
-        # 立ち上がりの数問は Difficulty が極端に低い（数分で終わる）。
-        # 1 日 1 問だと消化に日数を食うだけなので、易しいものはまとめて出す。
-        if a.n == 1:
-            while len(picks) < 3 and len(todo) > len(picks):
-                d = picks[-1].get("difficulty")
-                if d is None or d >= 400:
-                    break
-                picks.append(todo[len(picks)])
-        done = sum(1 for p in senkei if p.get("solved") or excluded(p, pairs, ids))
+        batch = current_batch(senkei, a.n, a.refill)
+        picks = [p for p in batch if not p["done"]]
+        done = sum(1 for p in senkei if p["done"])
+        carried = len(batch) - len(picks)
         target = (
-            f"精選100問 {done}/{len(senkei)} 完了 — 次は #{picks[0]['senkei']}"
-            f"「{picks[0]['category']}」"
+            f"精選100問 {done}/{len(senkei)} 完了 — この {len(picks)} 問"
+            f"（{a.refill} 問を log.md に書くと次のまとまりに移る）"
         )
+        if carried:
+            target += f" / うち {carried} 問は記録済みなので出していない"
 
     lines = [
         f"# 今日の 1 問 — {today.isoformat()}",
