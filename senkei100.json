@@ -1,7 +1,7 @@
 {
  "source": "https://qiita.com/e869120/items/eb50fdaece12be418faa",
  "title": "分野別 初中級者が解くべき過去問精選 100 問",
- "note": "AOJ の 21 問は AtCoder の同等問題に読み替えてある (replaces に元の問題名)。残る 8 問は代替が無いので AOJ のまま。",
+ "note": "AOJ の 21 問は AtCoder の同等問題に読み替えてある (replaces に元の問題名)。残る 8 問は代替が無いので AOJ のまま。問題の選定と分野分けは source の記事による。記事本文（各問への講評）は転載していない。",
  "problems": [
   {
    "no": 1,

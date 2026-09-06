@@ -1,8 +1,11 @@
 # 分野別 初中級者が解くべき過去問精選 100 問
 
-出典: https://qiita.com/e869120/items/eb50fdaece12be418faa（E869120 さん）
+出典: https://qiita.com/e869120/items/eb50fdaece12be418faa（E869120 さん）§2-3
 
-**進捗 2 / 92**（AtCoder 分のみ。目安は 100 問中 70 問、
+問題の選定と分野分けは上の記事による。記事本文は転載していない。
+AOJ の問題を AtCoder の同等問題に読み替えた部分はこのリポジトリの判断。
+
+**進捗 7 / 92**（AtCoder 分のみ。目安は 100 問中 70 問、
 全部解けたら青相当）。`bin/pick --refresh` で作り直される。
 
 毎日の 1 問はこのリストから**分野順に**出る。手で編集しても次の
@@ -17,14 +20,14 @@ AOJ のまま残した問題は代替が見つからなかったもの。ブラ�
 
 ## 全探索：全列挙
 
-- [ ] **1** [ABC051 B — Sum of Three Integers](https://atcoder.jp/contests/abc051/tasks/abc051_b) `784` ← ITP1_7_B - How Many Ways? の読み替え
-- [ ] **2** [ABC106 B — 105](https://atcoder.jp/contests/abc106/tasks/abc106_b) `-75`
-- [ ] **3** [ABC122 B — ATCoder](https://atcoder.jp/contests/abc122/tasks/abc122_b) `-122`
-- [ ] **4** [PAKENCAMP-2019-DAY3 C — カラオケ](https://atcoder.jp/contests/pakencamp-2019-day3/tasks/pakencamp_2019_day3_c) `—`
+- [x] **1** [ABC051 B — Sum of Three Integers](https://atcoder.jp/contests/abc051/tasks/abc051_b) `784` ← ITP1_7_B - How Many Ways? の読み替え
+- [x] **2** [ABC106 B — 105](https://atcoder.jp/contests/abc106/tasks/abc106_b) `-75`
+- [x] **3** [ABC122 B — ATCoder](https://atcoder.jp/contests/abc122/tasks/abc122_b) `-122`
+- [x] **4** [PAKENCAMP-2019-DAY3 C — カラオケ](https://atcoder.jp/contests/pakencamp-2019-day3/tasks/pakencamp_2019_day3_c) `—`
 
 ## 全探索：工夫して通り数を減らす全列挙
 
-- [ ] **5** [ABC095 C — Half and Half](https://atcoder.jp/contests/abc095/tasks/arc096_a) `273`
+- [x] **5** [ABC095 C — Half and Half](https://atcoder.jp/contests/abc095/tasks/arc096_a) `273`
 - [ ] **6** [SUMITRUST2019 D — Lucky PIN](https://atcoder.jp/contests/sumitrust2019/tasks/sumitb2019_d) `838`
 - [ ] **7** [JOI2007HO C — 最古の遺跡](https://atcoder.jp/contests/joi2007ho/tasks/joi2007ho_c) `—`
 - [ ] **8** [S8PC-6 B — AtCoder Market](https://atcoder.jp/contests/s8pc-6/tasks/s8pc_6_b) `—`
