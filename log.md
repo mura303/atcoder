@@ -16,6 +16,7 @@
 
 2026-09-05 ABC199 C — IPFL  解説AC  [考察不足] 方針は大体合っていたが細部が違った
 2026-09-06 ABC051 B — Sum of Three Integers  自力AC  ３重ループを２重にした。早期continueは無くても良かった。
-2026-09-06 ABC122 B — ATCoder  未記入
-2026-09-06 PAKENCAMP-2019-DAY3 C — カラオケ  未記入
-2026-09-06 ABC095 C — Half and Half  未記入
+2026-09-06 ABC122 B — ATCoder  自力AC
+2026-09-06 PAKENCAMP-2019-DAY3 C — カラオケ  自力AC
+2026-09-06 ABC095 C — Half and Half  自力AC
+

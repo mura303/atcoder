@@ -42,6 +42,45 @@ dependencies = [
 ]
 
 [[package]]
+name = "abc095"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "abc106"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "abc122"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
 name = "abc141"
 version = "0.1.0"
 dependencies = [
@@ -82,6 +121,19 @@ dependencies = [
 
 [[package]]
 name = "abc428"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "abc474"
 version = "0.1.0"
 dependencies = [
  "ac-library-rs",
@@ -190,6 +242,19 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "071dfc062690e90b734c0b2273ce72ad0ffa95f0c74596bc250dcfd960262841"
 dependencies = [
  "autocfg",
+]
+
+[[package]]
+name = "pakencamp-2019-day3"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
 ]
 
 [[package]]
