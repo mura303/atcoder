@@ -3,7 +3,150 @@
 version = 4
 
 [[package]]
+name = "JOI2007HO"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "abc002"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "abc006"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "abc007"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "abc012"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "abc014"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "abc021"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "abc023"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "abc034"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "abc045"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
 name = "abc051"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "abc054"
 version = "0.1.0"
 dependencies = [
  "ac-library-rs",
@@ -42,7 +185,111 @@ dependencies = [
 ]
 
 [[package]]
+name = "abc073"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "abc074"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "abc075"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "abc077"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "abc079"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "abc084"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "abc088"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
 name = "abc095"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "abc099"
 version = "0.1.0"
 dependencies = [
  "ac-library-rs",
@@ -68,6 +315,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "abc120"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
 name = "abc122"
 version = "0.1.0"
 dependencies = [
@@ -81,7 +341,202 @@ dependencies = [
 ]
 
 [[package]]
+name = "abc128"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "abc134"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "abc138"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "abc139"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
 name = "abc141"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "abc142"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "abc143"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "abc144"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "abc145"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "abc149"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "abc150"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "abc153"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "abc156"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "abc168"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "abc180"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "abc183"
 version = "0.1.0"
 dependencies = [
  "ac-library-rs",
@@ -108,6 +563,45 @@ dependencies = [
 
 [[package]]
 name = "abc199"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "abc218"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "abc284"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "abc340"
 version = "0.1.0"
 dependencies = [
  "ac-library-rs",
@@ -152,10 +646,62 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f224825847080e387f2f23822f307f5b0e41f3f9d70076ea0452c7b032d603c9"
 
 [[package]]
+name = "arc054"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "atc001"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
 name = "autocfg"
 version = "1.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f2032f911046de80f0a198e0901378627c33f59ea0ac00e363d481118bd70a53"
+
+[[package]]
+name = "ddcc2020-qual"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "dp"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
 
 [[package]]
 name = "either"
@@ -164,12 +710,259 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "252afb9ae5eaa683babdc6a068b3f5726eb19e05070c731f9b2a23a7c3e8ed34"
 
 [[package]]
+name = "gigacode-2019"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
 name = "itertools"
 version = "0.14.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2b192c782037fadd9cfa75548310488aabdbf3d2da73885b31bd0abd03351285"
 dependencies = [
  "either",
+]
+
+[[package]]
+name = "joi2008ho"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "joi2008yo"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "joi2009ho"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "joi2009yo"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "joi2010ho"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "joi2011ho"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "joi2011yo"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "joi2012ho"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "joi2012yo"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "joi2013ho"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "joi2013yo"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "joi2014yo"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "joi2015ho"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "joi2015yo"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "joi2016yo"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "joi2017yo"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "joisc2010"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "nikkei2019-final"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
 ]
 
 [[package]]
@@ -302,6 +1095,84 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "357703d41365b4b27c590e3ed91eabb1b663f07c4c084095e60cbed4362dff0d"
 
 [[package]]
+name = "s8pc-1"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "s8pc-3"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "s8pc-4"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "s8pc-5"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "s8pc-6"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
+name = "sumitrust2019"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
+]
+
+[[package]]
 name = "superslice"
 version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -316,6 +1187,19 @@ dependencies = [
  "proc-macro2",
  "quote",
  "unicode-ident",
+]
+
+[[package]]
+name = "tenka1-2018-beginner"
+version = "0.1.0"
+dependencies = [
+ "ac-library-rs",
+ "itertools",
+ "num",
+ "num-integer",
+ "proconio",
+ "rustc-hash",
+ "superslice",
 ]
 
 [[package]]

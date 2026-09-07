@@ -1,0 +1,13 @@
+[package]
+name = "abc002"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+proconio.workspace = true
+ac-library-rs.workspace = true
+itertools.workspace = true
+num.workspace = true
+num-integer.workspace = true
+superslice.workspace = true
+rustc-hash.workspace = true

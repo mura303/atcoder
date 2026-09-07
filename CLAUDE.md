@@ -100,7 +100,8 @@ Mac のセッションを `/remote-control` でスマホから操作する。実
   ジャッジに存在しないクレートを使うと CE になる。追加が必要なら
   https://img.atcoder.jp/file/language-update/2025-10/language-list.html で存在を確認してから
 - ACL は `use ac_library::...`（`ac_library_rs` ではない）
-- ローカル判定は `bin/t <contest> <problem>`、問題の追加は `bin/new <contest>`
+- ローカル判定は `bin/t <contest> <problem>`、問題の追加は `bin/new <contest>`。
+  **精選100問の足場は `bin/prepare` で作成済み**なので、出題のたびに `bin/new` は要らない
 - **出題は「精選 100 問」を分野順に進む**（`SENKEI100.md`、`ROADMAP.md` §3）。
   **一度に 3 問出て、2 問を `log.md` に書くと次の 3 問に移る。**
   日付では進まないので、解けても解けなくても（`未AC` でも）書かせること

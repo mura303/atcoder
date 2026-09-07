@@ -1,0 +1,56 @@
+#!/usr/bin/env python3
+"""精選 100 問の足場をまとめて作る。
+
+    bin/prepare              # 未作成のものだけ作る
+    bin/prepare --force      # 既にあるものも tests を取り直す
+
+pool.json のサンプルを使うのでネットワークは要らない。
+**既にある解答 (src/bin/*.rs) は書き換えない。**
+"""
+import json
+import os
+import subprocess
+import sys
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+def main():
+    force = "--force" in sys.argv
+    path = os.path.join(ROOT, "senkei100.json")
+    if not os.path.exists(path):
+        sys.exit("senkei100.json が無い。")
+    entries = [e for e in json.load(open(path, encoding="utf-8"))["problems"] if e.get("id")]
+
+    made, skipped, failed, nosample = [], [], [], []
+    for e in entries:
+        contest, letter = e["contest_id"], e["index"].lower()
+        src = os.path.join(ROOT, "contests", contest, "src", "bin", f"{letter}.rs")
+        if os.path.exists(src) and not force:
+            skipped.append(f"{contest} {letter}")
+            continue
+        r = subprocess.run(
+            [sys.executable, os.path.join(ROOT, "bin", "new"), contest, letter, "--from-pool"],
+            capture_output=True,
+            text=True,
+        )
+        if r.returncode != 0:
+            failed.append(f"{contest} {letter}: {(r.stderr or r.stdout).strip().splitlines()[-1]}")
+            continue
+        made.append(f"{contest} {letter}")
+        if "サンプル 0 件" in r.stdout or "手で置く" in r.stdout:
+            nosample.append(f"{contest} {letter}")
+
+    print(f"作成 {len(made)} / 既にあった {len(skipped)} / 失敗 {len(failed)}")
+    if nosample:
+        print(f"\nサンプルが無い（bin/t が使えない。問題ページを見て手で置く）:")
+        for x in nosample:
+            print(f"  {x}")
+    if failed:
+        print(f"\n失敗:")
+        for x in failed:
+            print(f"  {x}")
+
+
+if __name__ == "__main__":
+    main()

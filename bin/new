@@ -4,6 +4,7 @@
     bin/new abc430           # 全問ぶん
     bin/new abc430 d e       # 一部だけ
     bin/new abc430 --no-fetch a b c d   # サンプルは自分で置く (開催中など)
+    bin/new abc430 d --from-pool        # ネットに行かず pool.json だけで作る
 
 過去問ページはログイン不要で読めるので、精進用途ならこれで足りる。
 開催中のコンテストは非公開でサンプルを取れないため --no-fetch を使い、
@@ -102,14 +103,28 @@ def write(path, text):
 
 
 def main():
-    args = [a for a in sys.argv[1:] if a != "--no-fetch"]
+    flags = {"--no-fetch", "--from-pool"}
+    args = [a for a in sys.argv[1:] if a not in flags]
     do_fetch = "--no-fetch" not in sys.argv
+    use_pool = "--from-pool" in sys.argv
     if not args:
         sys.exit(__doc__)
     contest, want = args[0], {p.lower() for p in args[1:]}
 
     letters, urls, pooled = [], {}, {}
-    if do_fetch:
+    if use_pool:
+        # ネットに出られるかに関わらず pool.json だけで作る。まとめて作るとき用。
+        if not want:
+            sys.exit(f"--from-pool のときは問題記号が要る: bin/new {contest} c --from-pool")
+        pooled = from_pool(contest, want)
+        missing = sorted(want - set(pooled))
+        if missing:
+            sys.exit(f"pool.json に {contest} {' '.join(missing)} が無い。"
+                     f"`bin/pick --refresh` で作り直すか、--from-pool を外す。")
+        do_fetch = False
+        letters = sorted(pooled)
+        urls = {l: pooled[l][0] for l in letters}
+    elif do_fetch:
         try:
             for letter, url in fetch_tasks(contest):
                 letters.append(letter)
