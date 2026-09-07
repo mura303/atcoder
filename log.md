@@ -20,6 +20,6 @@
 2026-09-06 PAKENCAMP-2019-DAY3 C — カラオケ  自力AC
 2026-09-06 ABC095 C — Half and Half  自力AC
 
-2026-09-07 SUMITRUST2019 D — Lucky PIN  未記入
+2026-09-07 SUMITRUST2019 D — Lucky PIN  自力AC(擬似)  二重ループで済むサイズ、がだいじ
 2026-09-07 JOI2007HO C — 最古の遺跡  未記入
 2026-09-07 S8PC-6 B — AtCoder Market  未記入
