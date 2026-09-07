@@ -13,48 +13,37 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        a: [[i64; n]; n],
     }
 
-    for i in 0..n {
-        if a[i][i] != 0 {
-            println!("-1");
-            return;
+    let mut points = Vec::with_capacity(n);
+    for _ in 0..n {
+        input! {
+            x: i64,
+            y: i64,
         }
+        points.push((x, y));
     }
 
-    for i in 0..n {
-        for j in 0..n {
-            if a[i][j] != a[j][i] {
-                println!("-1");
-                return;
-            }
-        }
-    }
-
-    for k in 0..n {
-        for i in 0..n {
-            for j in 0..n {
-                if a[i][j] > a[i][k] + a[k][j] {
-                    println!("-1");
-                    return;
-                }
-            }
-        }
-    }
-
+    let set: std::collections::HashSet<(i64, i64)> = points.iter().copied().collect();
     let mut ans = 0i64;
+
     for i in 0..n {
+        let (x1, y1) = points[i];
         for j in (i + 1)..n {
-            let mut needed = true;
-            for k in 0..n {
-                if k != i && k != j && a[i][j] == a[i][k] + a[k][j] {
-                    needed = false;
-                    break;
+            let (x2, y2) = points[j];
+            let dx = x2 - x1;
+            let dy = y2 - y1;
+            let len2 = dx * dx + dy * dy;
+
+            let candidates = [
+                ((x1 - dy, y1 + dx), (x2 - dy, y2 + dx)),
+                ((x1 + dy, y1 - dx), (x2 + dy, y2 - dx)),
+            ];
+
+            for &(p3, p4) in &candidates {
+                if set.contains(&p3) && set.contains(&p4) && len2 > ans {
+                    ans = len2;
                 }
-            }
-            if needed {
-                ans += a[i][j];
             }
         }
     }
