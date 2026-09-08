@@ -24,3 +24,6 @@
 2026-09-07 JOI2007HO C — 最古の遺跡 解説AC 対角線 
 2026-09-07 S8PC-6 B — AtCoder Market  解説AC ループでも間に合うけど中央値で済む
 
+2026-09-08 JOI2008YO D — 星座探し  未記入
+2026-09-08 ABC045 C — Many Formulas  未記入
+2026-09-08 ABC128 C — Switches  未記入

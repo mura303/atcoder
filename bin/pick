@@ -108,7 +108,9 @@ POOL = os.path.join(ROOT, "pool.json")
 
 # LaTeX のままだとスマホで読みにくいので最低限だけ置き換える
 TEX = [
-    (r"\\leq|\\le", "≤"), (r"\\geq|\\ge", "≥"), (r"\\times", "×"),
+    # \leqq を先に置換しないと \leq が食って "q" が残る
+    (r"\\leqq|\\leq|\\le", "≤"), (r"\\geqq|\\geq|\\ge", "≥"),
+    (r"\\times", "×"), (r"\\,", ""), (r"\\;", " "),
     (r"\\cdots|\\dots|\\ldots", "…"), (r"\\neq", "≠"), (r"\\lt", "<"),
     (r"\\gt", ">"), (r"\\%", "%"), (r"\\ ", " "),
 ]
@@ -116,6 +118,9 @@ TEX = [
 
 def clean_text(raw):
     t = html.unescape(re.sub(r"<[^>]+>", "", raw))
+    # alt 属性の中にタグが入っている img があり、タグを剥がすと
+    # 『… src="…" />』が本文に残る。それを落とす。
+    t = re.sub(r'"\s*src="[^"]*"\s*/?>', "", t)
     for pat, rep in TEX:
         t = re.sub(pat, rep, t)
     lines = [l.strip() for l in t.split("\n") if l.strip()]
@@ -139,7 +144,8 @@ def fetch_brief(url):
         body = r.read().decode("utf-8", "replace")
 
     def section(name):
-        m = re.search(rf"<h3>{name}</h3>(.*?)</section>", body, re.S)
+        # 古い問題は <h3> に属性が付き、次の <h3> で切れる（</section> まで行かない）
+        m = re.search(rf"<h3[^>]*>\s*{name}\s*</h3>(.*?)(?=<h3|</section>)", body, re.S)
         return clean_text(m.group(1)) if m else []
 
     def samples():
@@ -159,16 +165,21 @@ def fetch_brief(url):
         ins, outs = collect("入力"), collect("出力")
         return [{"in": ins[i], "out": outs[i]} for i in sorted(ins) if i in outs]
 
-    statement = " ".join(section("問題文"))
+    # JOI などは見出しが「問題文」ではなく「問題」
+    statement = " ".join(section("問題文") or section("問題"))
     if len(statement) > 600:
         statement = statement[:600] + "…"
+    # 「制約」節が無い問題は、入力の説明に上限が書いてある
+    constraints = section("制約")
+    input_format = [] if constraints else section("入力")
     # インタラクティブ問題にはサンプルが無く、bin/t で判定できない。
     # さらに #[fastout] を付けたままだと出力が届かず固まるので、出題時に警告する。
     interactive = re.search(r"<h3[^>]*>\s*(入出力例|Sample Interaction)\s*</h3>", body)
     return {
         "v": 2,
         "statement": statement,
-        "constraints": section("制約"),
+        "constraints": constraints,
+        "input": input_format,
         "samples": samples(),
         "interactive": bool(interactive),
     }
@@ -545,6 +556,10 @@ def main():
         if brief.get("constraints"):
             lines += ["**制約**", ""]
             lines += [f"- {c}" for c in brief["constraints"]]
+            lines += [""]
+        elif brief.get("input"):
+            lines += ["**入力**（制約もここに書かれている）", ""]
+            lines += brief["input"]
             lines += [""]
         if not brief.get("statement") and not brief.get("samples"):
             # 古い JOI などは AtCoder に問題文が無く、PDF へのリンクだけ置いてある。
