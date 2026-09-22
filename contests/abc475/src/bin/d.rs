@@ -1,4 +1,4 @@
-// https://atcoder.jp/contests/abc128/tasks/abc128_c
+// https://atcoder.jp/contests/abc475/tasks/
 //
 // 提出時はこのファイルの中身をそのまま貼る。
 // #[fastout] は大量出力を高速化するが、インタラクティブ問題では外すこと
@@ -11,21 +11,11 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 #[fastout]
 fn main() {
-    
     input! {
         n: usize,
-        m: usize,
+        a: [i64; n],
     }
-    let mut switches: Vec<Vec<usize>> = Vec::with_capacity(m);
-    for _ in 0..m {
-        input! {
-            k: usize,
-            s: [Usize1; k],
-        }
-        switches.push(s);
-    }
-    input! {
-        p: [usize; m],
-    }
-    let _ = (n, switches, p);
+
+    let ans: i64 = a.iter().sum();
+    println!("{}", ans);
 }
