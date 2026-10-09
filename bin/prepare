@@ -5,7 +5,8 @@
     bin/prepare --force      # 既にあるものも tests を取り直す
 
 pool.json のサンプルを使うのでネットワークは要らない。
-**既にある解答 (src/bin/*.rs) は書き換えない。**
+解答の雛形は作らない (言語は解くときに選ぶ: bin/new <contest> <記号> --lang cpp / rb)。
+**既にある解答は書き換えない。**
 """
 import json
 import os
@@ -25,12 +26,12 @@ def main():
     made, skipped, failed, nosample = [], [], [], []
     for e in entries:
         contest, letter = e["contest_id"], e["index"].lower()
-        src = os.path.join(ROOT, "contests", contest, "src", "bin", f"{letter}.rs")
-        if os.path.exists(src) and not force:
+        tests = os.path.join(ROOT, "contests", contest, "tests", letter)
+        if os.path.isdir(tests) and any(f.endswith(".in") for f in os.listdir(tests)) and not force:
             skipped.append(f"{contest} {letter}")
             continue
         r = subprocess.run(
-            [sys.executable, os.path.join(ROOT, "bin", "new"), contest, letter, "--from-pool"],
+            [sys.executable, os.path.join(ROOT, "bin", "new"), contest, letter, "--from-pool", "--lang", "none"],
             capture_output=True,
             text=True,
         )

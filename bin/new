@@ -5,6 +5,10 @@
     bin/new abc430 d e       # 一部だけ
     bin/new abc430 --no-fetch a b c d   # サンプルは自分で置く (開催中など)
     bin/new abc430 d --from-pool        # ネットに行かず pool.json だけで作る
+    bin/new abc430 d --lang rb          # Ruby の雛形も作る (cpp,rb のように , 区切りで複数可)
+
+解答の雛形は contests/<contest>/<記号>.cpp (既定) と .rb。--lang none で作らない
+(bin/prepare は none で呼ぶ。言語は解くときに選ぶ)。
 
 過去問ページはログイン不要で読めるので、精進用途ならこれで足りる。
 開催中のコンテストは非公開でサンプルを取れないため --no-fetch を使い、
@@ -104,7 +108,15 @@ def write(path, text):
 
 def main():
     flags = {"--no-fetch", "--from-pool"}
-    args = [a for a in sys.argv[1:] if a not in flags]
+    argv = sys.argv[1:]
+    langs = ["cpp"]
+    if "--lang" in argv:
+        i = argv.index("--lang")
+        langs = [l for l in argv[i + 1].split(",") if l != "none"]
+        del argv[i : i + 2]
+        if any(l not in ("cpp", "rb") for l in langs):
+            sys.exit("--lang は cpp / rb / none (, 区切りで複数)")
+    args = [a for a in argv if a not in flags]
     do_fetch = "--no-fetch" not in sys.argv
     use_pool = "--from-pool" in sys.argv
     if not args:
@@ -162,33 +174,19 @@ def main():
 
     targets = [l for l in letters if not want or l in want]
     pkg = os.path.join(ROOT, "contests", contest)
-    template = open(os.path.join(ROOT, "template", "main.rs"), encoding="utf-8").read()
-
-    write(
-        os.path.join(pkg, "Cargo.toml"),
-        f'''[package]
-name = "{contest}"
-version.workspace = true
-edition.workspace = true
-
-[dependencies]
-proconio.workspace = true
-ac-library-rs.workspace = true
-itertools.workspace = true
-num.workspace = true
-num-integer.workspace = true
-superslice.workspace = true
-rustc-hash.workspace = true
-''',
-    )
+    templates = {
+        l: open(os.path.join(ROOT, "template", f"main.{l}"), encoding="utf-8").read()
+        for l in langs
+    }
 
     for letter in targets:
-        src = os.path.join(pkg, "src", "bin", f"{letter}.rs")
-        if os.path.exists(src):
-            print(f"{letter}: src はすでにある (残す)")
-        else:
-            url = urls.get(letter, f"https://atcoder.jp/contests/{contest}/tasks/")
-            write(src, template.replace("{{PROBLEM}}", url))
+        for l, template in templates.items():
+            src = os.path.join(pkg, f"{letter}.{l}")
+            if os.path.exists(src):
+                print(f"{letter}.{l}: すでにある (残す)")
+            else:
+                url = urls.get(letter, f"https://atcoder.jp/contests/{contest}/tasks/")
+                write(src, template.replace("{{PROBLEM}}", url))
 
         if not do_fetch:
             cases = pooled.get(letter, (None, []))[1]
@@ -213,7 +211,7 @@ rustc-hash.workspace = true
         print(f"{letter}: 作成 (サンプル {len(cases)} 件)")
         time.sleep(0.5)
 
-    print(f"\n-> contests/{contest}/src/bin/*.rs を編集して、bin/t {contest} {targets[0]}")
+    print(f"\n-> contests/{contest}/{targets[0]}.cpp (または .rb) を編集して、bin/t {contest} {targets[0]}")
 
 
 if __name__ == "__main__":

@@ -4,14 +4,18 @@
     bin/t abc430 c              # contests/abc430/tests/c/*.in を全部流す
     bin/t abc430 c 2            # 2 番のケースだけ
     bin/t abc430 c --tl 3       # 実行時間制限を 3 秒に (既定 2 秒)
+    bin/t abc430 c --lang rb    # cpp と rb の両方があるときに選ぶ
 
-実行は release ビルド。ワークスペースの [profile.release] で overflow-checks を
-有効にしてあるので、i64 の桁溢れはここで panic して見つかる。
+C++ は -O2 -fsanitize=address,undefined でビルドする。符号付き整数の溢れや
+配列の範囲外参照はここで落ちて見つかる (ジャッジでは黙って誤答になる)。
 """
 import os
 import subprocess
 import sys
 import time
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from judgelib import build, pick_lang
 
 # Windows だとコンソールのコードページ (cp932 など) が既定になり、
 # 日本語の出力 (期待/実際など) が文字化けする。UTF-8 に固定する。
@@ -69,18 +73,17 @@ def main():
         i = argv.index("--tl")
         tl = float(argv[i + 1])
         del argv[i : i + 2]
+    lang = None
+    if "--lang" in argv:
+        i = argv.index("--lang")
+        lang = argv[i + 1]
+        del argv[i : i + 2]
     if len(argv) < 2:
         sys.exit(__doc__)
     contest, problem, only = argv[0], argv[1], (argv[2] if len(argv) > 2 else None)
 
-    build = subprocess.run(
-        ["cargo", "build", "--release", "-p", contest, "--bin", problem],
-        cwd=ROOT,
-    )
-    if build.returncode != 0:
-        sys.exit(build.returncode)
-
-    binary = os.path.join(ROOT, "target", "release", problem)
+    lang, src = pick_lang(contest, problem, lang)
+    cmd = build(contest, problem, lang, src)
     tests = os.path.join(ROOT, "contests", contest, "tests", problem)
     if not os.path.isdir(tests):
         sys.exit(f"{tests} が無い。bin/new でサンプルを取るか、手で置く。")
@@ -107,7 +110,7 @@ def main():
         start = time.perf_counter()
         try:
             proc = subprocess.run(
-                [binary], input=inp, capture_output=True, text=True, timeout=tl
+                cmd, input=inp, capture_output=True, text=True, timeout=tl
             )
         except subprocess.TimeoutExpired:
             print(f"  {RED}TLE{RESET} {name}  (> {tl}s)")

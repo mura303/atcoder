@@ -1,4 +1,4 @@
-# 茶色 → 入水 ロードマップ (Rust)
+# 茶色 → 入水 ロードマップ (C++ / Ruby)
 
 ## 0. 目的地の定義
 
@@ -46,7 +46,7 @@ ABC (Beginner Contest) で 1200 相当のパフォーマンスを出す、とい
 
 ### 2.2 グラフ
 - DFS / BFS、グリッド上の探索、連結成分の数え上げ
-- **Union-Find** → `ac_library::Dsu`
+- **Union-Find** → `atcoder::dsu`
 - **ダイクストラ法**（`BinaryHeap` + `Reverse`）
 - 01-BFS (`VecDeque`)、ワーシャルフロイド (`N ≤ 400`)、ベルマンフォード（負閉路）
 - 最小全域木（クラスカル法 = ソート + Dsu）
@@ -64,12 +64,12 @@ ABC (Beginner Contest) で 1200 相当のパフォーマンスを出す、とい
 - エラトステネスの篩、素因数分解、約数列挙 (`O(√N)`)
 - GCD / LCM（`num_integer::gcd`）
 - **繰り返し二乗法**、mod 逆元、`nCr mod p`（階乗の前計算）
-- → `ac_library::ModInt998244353` / `ModInt1000000007` で mod 演算はほぼ自動化できる
+- → `atcoder::modint998244353` / `modint1000000007`（C++） で mod 演算はほぼ自動化できる
 
 ### 2.5 データ構造
-- `BinaryHeap`（優先度付きキュー）、`BTreeMap` / `BTreeSet`（`range` で二分探索的に使う）
-- **セグメント木** → `ac_library::Segtree`、**BIT** → `ac_library::FenwickTree`
-- `rustc_hash::FxHashMap`（標準 `HashMap` は競プロでは遅い）
+- `priority_queue`（優先度付きキュー）、`map` / `set`（`lower_bound` で二分探索的に使う）。Ruby は標準に無いので配列で自作するか C++ を使う
+- **セグメント木** → `atcoder::segtree`、**BIT** → `atcoder::fenwick_tree`
+- C++ の `unordered_map` は衝突攻撃されうる。迷ったら `map`
 
 ### 2.6 水色では基本いらないもの
 遅延セグ木、ローリングハッシュ、Z-algorithm、最大流、SCC、Grundy 数、平方分割。
@@ -91,7 +91,7 @@ Union-Find に一度も当たらないまま月が過ぎることがある。精
 **分野順に並べた** もので、§2 の穴埋めがそのまま進捗になる。目安は 100 問中 70 問。
 
 EDPC A〜L は 1 に取り込み済み（AOJ の DP 基本問題を EDPC に読み替えてある）。
-`ac_library` の素振りとして 4 を先に触ってしまってもよい（1 日で終わる）。
+ACL (`atcoder::`) の素振りとして 4 を先に触ってしまってもよい（1 日で終わる）。
 
 ## 4. 日々の精進サイクル
 
@@ -124,27 +124,32 @@ EDPC A〜L は 1 に取り込み済み（AOJ の DP 基本問題を EDPC に読�
 
 バチャは「速度不足」に唯一効く練習。実装が遅い自覚があるなら週 2 回に増やす。
 
-## 6. Rust で戦うための素振り
+## 6. 言語で損しないための素振り
 
-言語で損をしないために、以下は**考えずに手が動く**状態にしておく。
-（詳細な落とし穴は `README.md` の「Rust 固有のハマりどころ」を参照）
+以下は**考えずに手が動く**状態にしておく。落とし穴は `README.md` の「言語ごとのハマりどころ」。
 
-```rust
-// 入力の型はこれだけ覚えれば ABC の 9 割が書ける
-input! {
-    n: usize,
-    a: [i64; n],            // 長さ n の配列
-    s: Chars,               // Vec<char>
-    edges: [(usize, usize); m],
-    grid: [Chars; h],
-}
-input! { p: [Usize1; k] }   // 1-indexed 入力を 0-indexed にして受け取る
+```cpp
+// C++: 入力はこれだけ覚えれば ABC の 9 割が書ける
+int n; cin >> n;
+vector<ll> a(n); rep(i, n) cin >> a[i];   // 長さ n の配列
+string s; cin >> s;
+vector<pair<int,int>> e(m); for (auto& [u, v] : e) { cin >> u >> v; u--; v--; }  // 0-indexed に
+vector<string> grid(h); rep(i, h) cin >> grid[i];
 ```
 
-- 迷ったら **`i64`**。`usize` の引き算は panic 源
-- 出力が多い問題は `#[fastout]`（インタラクティブでは外す）
-- `BinaryHeap` は最大ヒープ。ダイクストラでは `std::cmp::Reverse` で包む
-- 探索の再帰が深いときはスタックを明示的に持つ
+```ruby
+# Ruby: 入力
+n = gets.to_i
+a = gets.split.map(&:to_i)
+s = gets.chomp
+edges = Array.new(m) { gets.split.map { |x| x.to_i - 1 } }   # 0-indexed に
+grid = Array.new(h) { gets.chomp }
+```
+
+- 迷ったら C++ は **`long long`**、`size()` の引き算は `(int)` に上げてから
+- 優先度付きキューは C++ の `priority_queue` が最大ヒープ。ダイクストラは `greater<>` で最小にする
+- 速さが要る問題は C++、短く書ける考察系は Ruby、のように使い分けてよい
+- Ruby は `N ≥ 2×10^5` の素朴なループが危ない。計算量の見積もりを先にする
 
 ## 7. マイルストーン
 
