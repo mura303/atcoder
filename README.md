@@ -40,6 +40,9 @@ contests/abc428/
 開催中のコンテストは問題ページが非公開でサンプルを取れない。
 その場合は `bin/new abc999 --no-fetch a b c d` で枠だけ作り、
 `tests/a/1.in` `tests/a/1.out` に手で貼る。
+手で貼る代わりに、**問題ページ全体をコピー (Cmd+A, Cmd+C) して `bin/sample abc999 a`** と打てば、
+クリップボードから「入力例 N」「出力例 N」を拾って `tests/a/N.in` `N.out` に書き出す。
+コピーは 1 回で済む。
 
 ## 言語ごとのハマりどころ
 

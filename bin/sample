@@ -1,0 +1,80 @@
+#!/usr/bin/env python3
+"""クリップボード (または標準入力) の問題ページから、サンプルを tests/ に書き出す。
+
+    bin/sample abc999 a          # ページ全体をコピー (Cmd+A, Cmd+C) してから実行
+    bin/sample abc999 a --force  # 既にある N.in / N.out を上書きする
+    pbpaste | bin/sample abc999 a   # 標準入力が端末でなければそちらを読む
+
+「入力例 N」「出力例 N」(英語ページの Sample Input N / Sample Output N も可) の
+見出しの直後から、最初の空行までをサンプルとみなす。
+開催中のコンテストは bin/new でサンプルを取れないので、これで置く。
+"""
+import os
+import re
+import subprocess
+import sys
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+HEAD = re.compile(r"^\s*(?:(入力|出力)例|Sample\s+(Input|Output))\s*(\d+)\s*$", re.I)
+NOISE = {"コピー", "copy", "Copy"}
+
+
+def parse(text):
+    """{番号: {"in": str, "out": str}} を返す。"""
+    lines = text.replace("\r\n", "\n").split("\n")
+    found = {}
+    i = 0
+    while i < len(lines):
+        m = HEAD.match(lines[i])
+        if not m:
+            i += 1
+            continue
+        kind = "in" if (m.group(1) == "入力" or (m.group(2) or "").lower() == "input") else "out"
+        num = int(m.group(3))
+        i += 1
+        body = []
+        while i < len(lines) and not HEAD.match(lines[i]):
+            l = lines[i].rstrip()
+            i += 1
+            if l.strip() in NOISE:
+                continue
+            if l.strip() == "":
+                if body:  # サンプル本体の後の空行で終わり
+                    break
+                continue
+            body.append(l)
+        # 同じ番号が複数回出たら (日本語/英語の併記など) 最初のものを使う
+        found.setdefault(num, {}).setdefault(kind, "\n".join(body) + "\n")
+    return found
+
+
+def main():
+    argv = [a for a in sys.argv[1:] if a != "--force"]
+    force = "--force" in sys.argv
+    if len(argv) != 2:
+        sys.exit(__doc__)
+    contest, problem = argv[0], argv[1].lower()
+    text = sys.stdin.read() if not sys.stdin.isatty() else subprocess.run(
+        ["pbpaste"], capture_output=True, text=True
+    ).stdout
+    cases = parse(text)
+    cases = {n: c for n, c in cases.items() if "in" in c and "out" in c}
+    if not cases:
+        sys.exit("サンプルが見つからない。問題ページ全体をコピーしたか確認する (入力例/出力例の見出しが要る)。")
+
+    d = os.path.join(ROOT, "contests", contest, "tests", problem)
+    os.makedirs(d, exist_ok=True)
+    for n in sorted(cases):
+        for kind, ext in (("in", ".in"), ("out", ".out")):
+            path = os.path.join(d, f"{n}{ext}")
+            if os.path.exists(path) and not force:
+                print(f"{n}{ext}: すでにある (残す。上書きは --force)")
+                continue
+            with open(path, "w", encoding="utf-8") as f:
+                f.write(cases[n][kind])
+    print(f"{contest} {problem}: サンプル {len(cases)} 件 -> contests/{contest}/tests/{problem}/")
+    print(f"-> bin/t {contest} {problem}")
+
+
+if __name__ == "__main__":
+    main()
